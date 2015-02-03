@@ -15,7 +15,7 @@ Which posts should be analzed for data?
 
 
 Patch notes can be parsed for the following information:
-- date (date)
+- date (date and time)
 - patch number (char/number mix), not available for TF2
 - body
 - url - will likely be the key, since date may not be unique, and patch number is not reliable between projects
