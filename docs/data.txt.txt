@@ -1,0 +1,23 @@
+
+Reddit posts can be parsed for the following information:
+- date (date and time)
+- title (max: 300 char)
+- body (max: 10000 char)
+- numberOfComments (unsigned integer)
+- popularity (signed integer)
+- url (max: ~400 char) - guarenteed to be unique, so this will be the database key
+
+- A separate data table will be created for each game
+
+Which posts should be analzed for data?
+- Analyzing all posts would be expensive (in time) and would yield a lot of data that will be thrown out anyway
+- Instead, only analyze posts which contain keywords: "bug", "issue", "balance", etc.
+
+
+Patch notes can be parsed for the following information:
+- date (date)
+- patch number (char/number mix), not available for TF2
+- body
+- url - will likely be the key, since date may not be unique, and patch number is not reliable between projects
+
+- A separate data table will be created for each game
