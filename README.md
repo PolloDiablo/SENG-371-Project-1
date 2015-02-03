@@ -31,12 +31,17 @@ Codebases/Systems to Analyze:
 - Other social media? Twitter? Facebook? etc.
 
 Project milestones:
-- Data mine patch notes and forums/reddit
+- (Feb 8) Create database
+- (Feb 11) Data mine patch notes and forums/reddit
+  - Write Selenium scripts to parse websites and place data into database
   - Obtain occurences of keywords associated with the game (characters, items, maps, etc.), and the word "bug" or "issue"
-- Compare data from the patch notes to the data from the forums for a particular keyword
+- (Feb 12) Obtain and gain familiarity with a text analytics tool
+  - Make changes to data formats as necessary
+- (Feb 15) Compare data from the patch notes to the data from the forums for a particular keyword
   - Expected Outcome: if there is a large burst of forum activity regarding a keyword, there should be a patch soon to address the problem
   - Expected Outcome: after a successful patch, activity should dissipate. An unsuccessful patch will see continued activity
   - Expected Outcome: the time period between the burst of activity and the actual patch/fix should vary based on the project size and release schedule of the development team
+- (Feb 22) Report on results/findings
 
 Other notes:
 - If there is not correlation between forum comments and patch notes, this could possibly indicate a few things:
