@@ -26,14 +26,28 @@ Reddit:
     goto url
     - get body of comments
 
+ Limitations:
+    - Can only grab 100 results at a time, the current algorithm will only get the top 100 posts each day
+      - This may have an effect on the validity of the final results. A common bug may generate many more than 100 posts...
+    - The data is still variable. People can vote and comment on reddit posts for months after they are created
+      - However, post activity usually dies-out after a few days
+      - So, posts should not be analyzed that are more recent than ~1 week (TODO)
+    - It may be beneficial to ignore posts which have a net score <= 0. Since they may be spam/unhelpful/inaccurate
+    - Text analysis for keywords does not take into account word *meaning* i.e. sarcasm, jokes, etc.
 
-
+TODO other forums
 
 =====================================
 COMMON ALGORITHM:
 
+TODO
 
 
 =====================================
 INTERFACE:
-public interface IRedditPostParser{
+public interface IForumPostParser{
+
+TODO
+
+=====================================
+IForumPostParser parser;
