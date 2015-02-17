@@ -43,7 +43,7 @@ for each root page
 
 =====================================
 INTERFACE:
-public interface PatchNoteParser{
+public interface IPatchNoteParser{
   /** Returns name of this game, will be the name of the database table entry*/
   public abstract String getGameName();
   
@@ -63,7 +63,7 @@ public interface PatchNoteParser{
   public abstract String getBodyTextFromPatchURL(WebDriver driver);
 }
 =====================================
-PatchNoteParser parser;
+IPatchNoteParser parser;
 
 ALGORITHM PART 1 (populate table of patches):
 - parser.getGameName();
