@@ -42,47 +42,38 @@ for each root page
     - get body text
 
 =====================================
-INTERFACE FUNCTIONS:
-
-TODO: need to pass the Selenium driver around...
-/**
-- Finds the 
-
-*/
-/** Returns name of this game, will be the name of the database table entry*/
-public abstract String getGameName();
-
-/** Returns the list of root page URLs, there must be at least one
-    Each root page includes links and information about many patches.*/
-public abstract List<String> getRootPageURLs();
-
-/** 
-  Returns a list of details for each patch note from the root (the current page)
-  - url to full patch body (required)
-  - date (required)
-  - version-number/name (optional)
-*/
-public abstract List<String[]> getPatchDetailsFromRoot(;
-
-/** Get the body text from the patch (the current page)*/
-public abstract String getBodyTextFromPatchURL();
-
-
+INTERFACE:
+public interface PatchNoteParser{
+  /** Returns name of this game, will be the name of the database table entry*/
+  public abstract String getGameName();
+  
+  /** Returns the list of root page URLs, there must be at least one
+      Each root page includes links and information about many patches.*/
+  public abstract List<String> getRootPageURLs();
+  
+  /** 
+    Returns a list of details for each patch note from the root (the current page)
+    - url to full patch body (required)
+    - date (required)
+    - version-number/name (optional)
+  */
+  public abstract List<String[]> getPatchDetailsFromRoot(WebDriver driver);
+  
+  /** Get the body text from the patch (the current page)*/
+  public abstract String getBodyTextFromPatchURL(WebDriver driver);
+}
 =====================================
-The function to run this could possibly take the class as input?
+PatchNoteParser parser;
 
-ALGORITHM PART 1:
-- getGameName();
-- setup database table with given name (??uniqueness)
-
-ALGORITHM PART 2:
-- getRootPageURLs();
+ALGORITHM PART 1 (populate table of patches):
+- parser.getGameName();
+- parser.getRootPageURLs();
 - for each root page url
-  - getPatchDetailsFromRoot();
+  - parser.getPatchDetailsFromRoot(WebDriver driver);
   - add details to database (each list item is a new entry in the table)
     - if row already exists, then update it
     
-ALGORITHM PART 3:
+ALGORITHM PART 2 (get patch bodies):
 - for each row in table (? recently updated only)
   - go to url
-  getBodyTextFromPatchURL(patchURL);
+  parser.getBodyTextFromPatchURL(WebDriver driver);
