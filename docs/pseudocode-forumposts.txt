@@ -1,0 +1,39 @@
+Forum/Reddit Post Data Mining:
+
+Reddit:
+  Query variables:
+    - SUBREDDIT (name)
+    - STARTTIME (seconds since epoch)
+    - ENDTIME (seconds since epoch)
+    - KEYWORDS (a||b||c) - constant probably
+  http://www.reddit.com/r/<SUBREDDIT>/search?q=(and+timestamp:<STIME>..<ENDTIME>+title:'<KEYWORDS>')&sort=top&restrict_sr=on&syntax=cloudsearch&limit=100
+  e.g.
+  http://www.reddit.com/r/leagueoflegends/search?q=(and+timestamp:1421698435..1421784835+title:'bug||issue')&sort=top&restrict_sr=on&syntax=cloudsearch&limit=100
+
+
+  ****OR specify search.json
+  ****Can just GET this with a request, maybe don't need to use Selenium...
+  Details: http://www.reddit.com/dev/api#GET_search
+
+  ALGORITHM:
+  Given: subreddit, startDate, endDate
+  for (startDate < time < endDate) - incremented each day
+    - get url (to comments)
+    - get date
+    - get title
+    - get numberOfComments
+    - get popularity
+    goto url
+    - get body of comments
+
+
+
+
+=====================================
+COMMON ALGORITHM:
+
+
+
+=====================================
+INTERFACE:
+public interface IRedditPostParser{
