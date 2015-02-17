@@ -1,4 +1,4 @@
-REDDIT POST DATA:
+REDDIT POST DATA (table 1):
 Can be parsed for the following information:
 - gameName (which game this post is associated with)
 - url (max: ~400 char) - guarenteed to be unique, this will be the table key
@@ -13,7 +13,7 @@ Which posts should be analzed for data?
 - Instead, only analyze posts which contain keywords: "bug", "issue", "balance", etc.
 
 ----------------------------------------
-PATCH NOTES DATA:
+PATCH NOTES DATA (table 2):
 Can be parsed for the following information:
 - gameName (which game this patch is associated with)
 - url (max: ~400 char) - guarenteed to be unique, this will be the table key
