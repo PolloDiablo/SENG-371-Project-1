@@ -67,6 +67,10 @@ public abstract List<String[]> getPatchDetailsFromRoot(;
 /** Get the body text from the patch (the current page)*/
 public abstract String getBodyTextFromPatchURL();
 
+
+=====================================
+The function to run this could possibly take the class as input?
+
 ALGORITHM PART 1:
 - getGameName();
 - setup database table with given name (??uniqueness)
