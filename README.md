@@ -73,7 +73,6 @@ TODO - answers to questions
 - Parse data from Reddit (or other forums) that is older than 2013. This could allow us to see the evolution of a forum over time, as more game users start to gather there. Additionally, one could compare each forum for a given game and see usage trends as users migrate from one to another
 
 <h2>Project Management Information</h2>
-TODO
 
 <h3>Initial Project Milestones</h3>
 - (Feb 8) Create database
