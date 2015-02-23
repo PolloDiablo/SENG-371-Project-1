@@ -5,49 +5,43 @@ Reddit:
     - SUBREDDIT (name)
     - STARTTIME (seconds since epoch)
     - ENDTIME (seconds since epoch)
-    - KEYWORDS (a||b||c) - constant probably
+    - KEYWORDS (a||b||c) - currently "bug||issue||crash"
   http://www.reddit.com/r/<SUBREDDIT>/search?q=(and+timestamp:<STIME>..<ENDTIME>+title:'<KEYWORDS>')&sort=top&restrict_sr=on&syntax=cloudsearch&limit=100
   e.g.
   http://www.reddit.com/r/leagueoflegends/search?q=(and+timestamp:1421698435..1421784835+title:'bug||issue')&sort=top&restrict_sr=on&syntax=cloudsearch&limit=100
 
 
-  ****OR specify search.json
-  ****Can just GET this with a request, maybe don't need to use Selenium...
+  Specify "search.json" instead of just "search" to get results returned as a json object.
   Details: http://www.reddit.com/dev/api#GET_search
 
   ALGORITHM:
   Given: subreddit, startDate, endDate
-  for (startDate < time < endDate) - incremented each day
-    - get url (to comments)
-    - get date
-    - get title
-    - get numberOfComments
-    - get popularity
-    goto url
-    - get body of comments
+  for (startDate < time < endDate) - with weekly increments
+    Perform query to get all relevant posts this week
+    for each post this week (above minimum threshold score):
+      - get url (permalink)
+      - get date
+      - get title
+      - get numberOfComments
+      - get popularity (score)
+      - get body of comments (selftext)
+    All of the above data can be acquired from the search result json :D
 
  Limitations:
-    - Can only grab 100 results at a time, the current algorithm will only get the top 100 posts each day
-      - This may have an effect on the validity of the final results. A common bug may generate many more than 100 posts...
+    - Can only grab 100 results at a time, the current algorithm will only get the top 100 posts each week
+      - This may have an effect on the validity of the final results. A well-known issue may generate many more than 100 posts in the forum...
     - The data is still variable. People can vote and comment on reddit posts for months after they are created
       - However, post activity usually dies-out after a few days
       - So, posts should not be analyzed that are more recent than ~1 week (TODO)
-    - It may be beneficial to ignore posts which have a net score <= 0. Since they may be spam/unhelpful/inaccurate
     - Text analysis for keywords does not take into account word *meaning* i.e. sarcasm, jokes, etc.
-
-TODO other forums
-
-=====================================
-COMMON ALGORITHM:
-
-TODO
-
-
 =====================================
 INTERFACE:
-public interface IForumPostParser{
+- The only thing that changes between games is the subreddit we are looking in, so there really isn't much here
 
-TODO
-
-=====================================
-IForumPostParser parser;
+public interface IRedditPostParser {
+	/** Returns name of this game, will be associated with each database row entry*/
+	public abstract String getGameName();
+	
+	/** Returns name of the subreddit*/
+	public abstract String getSubredditName();
+}
