@@ -1,22 +1,27 @@
-REDDIT POST DATA (table 1):
-Can be parsed for the following information:
-- gameName (which game this post is associated with)
-- url (max: ~400 char) - guarenteed to be unique, this will be the table key
-- date (date and time)
-- title (max: 300 char)
-- body (max: 10000 char)
-- numberOfComments (unsigned integer)
-- popularity (signed integer)
+Data is stored in a local SQLEXPRESS database.
+The database consists of two tables:
+
+
+1. RedditPosts:
+- gameName - nvarchar(50) (which game this post is associated with)
+- url - nvarchar(400) (guarenteed to be unique, this will be the table key)
+- dateTime - datetime2(7)
+- title - nvarchar(300)
+- numberOfComments - int
+- popularity - int
+- body - nvarchar(MAX)
 
 Which posts should be analzed for data?
-- Analyzing all posts would be expensive (in time) and would yield a lot of data that will be thrown out anyway
-- Instead, only analyze posts which contain keywords: "bug", "issue", "balance", etc.
+- Storing data for all posts would be expensive (in time) and would yield a lot of data that will be thrown out anyway
+- Only store posts which contain keywords: "bug", "issue", "crash"
+- Only store posts with popularity >= 1
 
-----------------------------------------
-PATCH NOTES DATA (table 2):
+=====================================
+2. PatchNotes:
 Can be parsed for the following information:
-- gameName (which game this patch is associated with)
-- url (max: ~400 char) - guarenteed to be unique, this will be the table key
-- date (date and time)
-- patch number or patch name (char/number mix), if applicable
-- body (long text)
+- gameName - nvarchar(50) (which game this post is associated with)
+- url - nvarchar(400) (guarenteed to be unique, this will be the table key)
+- dateTime - datetime
+- title - nvarchar(300)
+- body - nvarchar(MAX)
+
