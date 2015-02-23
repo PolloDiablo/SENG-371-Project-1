@@ -63,6 +63,7 @@ TODO - answers to questions
 - The keywords used (bug, issue, and crash) will only capture a subset of user feedback. Users will discuss lots of other topics such as "game balance" which would not be represented in the data I acquired
 - Keyword searches do not take meaning into account (sarcasm, etc.)
 - The "score" of a forum post does not necessarily represent its validity/usefulness to developers, only its popularity
+- I just look for the appearance of a term in the patch note data. They could just be mentioning the term, but not actually making any changes. Again: it is difficult to ascertain <i>context/meaning</i> from text analytics.
 
 <h3>Future Work</h3>
 - Look at a variety of other forums and social media which players use to discuss video games and provide feedback to developers
