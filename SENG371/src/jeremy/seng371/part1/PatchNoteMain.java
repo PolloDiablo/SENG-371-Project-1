@@ -22,16 +22,15 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import jeremy.custom.parsers.LOLPatchNoteParser;
+import jeremy.custom.parsers.TF2PatchNoteParser;
+import jeremy.custom.parsers.WOWPatchNoteParser;
 
 public class PatchNoteMain {
 
 	public static class PatchNoteMetaData{
-
 		public final String url;
 		public final Date dateTime;
 		public final String title;
@@ -44,7 +43,32 @@ public class PatchNoteMain {
 	}
 	
 	private static final String databaseURL = "jdbc:sqlserver://localhost:1433;databaseName=db371project;user=sa;password=sosecure";
-	public static void main(String[] args) {
+	
+	public static void main(String[] args) {	
+		// Initialize the generic parsers
+		IPatchNoteParser parser1 = (IPatchNoteParser) new LOLPatchNoteParser();
+		IPatchNoteParser parser2 = (IPatchNoteParser) new TF2PatchNoteParser();
+		IPatchNoteParser parser3 = (IPatchNoteParser) new WOWPatchNoteParser();
+		
+		getPatchNoteData(parser1);
+		getPatchNoteData(parser2);
+		getPatchNoteData(parser3);
+	}
+	
+	/** The parser will specify the game name, and where a list of patch notes is located (urls).
+	 * 	The parser has a function to extract all metadata from a list of patch notes.
+	 * 	The parser has a function to extract the body text from a singular patch note page.
+	 * 
+	 * 	This function utilizes the above functions and stores the resulting data in a database.
+	 * 
+	 * Note: this runs in two parts, first the metadata for all patch notes is collected
+	 * 			then in part #2, the body of each patch note is collected
+	 * 
+	 * @param parser
+	 */
+	public static void getPatchNoteData(IPatchNoteParser parser){
+		System.out.println("Patch note parsing starting for " + parser.getGameName());
+		
 		// Initialize HTTP client
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		CloseableHttpResponse response = null;
@@ -55,16 +79,13 @@ public class PatchNoteMain {
 		ResultSet rs = null;
 		String sql;
 		
-		// Initialize the generic parser
-		IPatchNoteParser parser = (IPatchNoteParser) new LOLPatchNoteParser();
-		
 		try {		
 			// Setup database connection
+
 			System.out.println("Connecting to database...");
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 			conn = DriverManager.getConnection(databaseURL);
 			
-			/*
 			// ALGORITHM PART 1 (populate table of patches):
 			System.out.println("Parsing patch note metadata...");
 			List<String> rootURLs = parser.getRootPageURLs();			
@@ -72,12 +93,7 @@ public class PatchNoteMain {
 				
 				// Get the HTML of the root page
 				HttpGet httpGet = new HttpGet(rootURL);
-				
-				System.out.println("Ignore this?...");
-				
-				response = httpclient.execute(httpGet);
-				
-				System.out.println("...welp, its hopefully all good.");
+				response = httpclient.execute(httpGet); //TODO fix the cookie warning
 				HttpEntity entity1 = response.getEntity();
 				String htmlPageText = EntityUtils.toString(entity1);
 				
@@ -97,6 +113,9 @@ public class PatchNoteMain {
 					stmt.setString(1, p.url);
 					rs = stmt.executeQuery();
 					if (!rs.next()){
+						
+						// TODO test validity of the url for each patch note before inserting
+						
 						// ResultSet is empty => We need to create a new entry for this data
 						sql = "INSERT INTO PatchNotes VALUES (?,?,?,?,?)";
 						stmt = conn.prepareStatement(sql);
@@ -111,36 +130,39 @@ public class PatchNoteMain {
 						// Row already exists
 						//TODO If new data is different, then update the row
 					}	
-									
+								
 				}
-			}*/
+			}
 			
 			// ALGORITHM PART 2 (get patch bodies):
 			System.out.println("Getting patch bodies...");
-			sql = "SELECT * FROM PatchNotes WHERE body=?";
+			sql = "SELECT * FROM PatchNotes WHERE body=? AND gameName = ?";
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, "");
+			stmt.setString(2, parser.getGameName());
 			rs = stmt.executeQuery();
 			// Iterate through each patch note that does not yet have an associated body
 			while(rs.next()){
 				// Get the HTML of the page
-				/*String patchNoteURL = rs.getString("url");
+				String patchNoteURL = rs.getString("url");
 				HttpGet httpGet = new HttpGet(patchNoteURL);
-				response = httpclient.execute(httpGet);
+				response = httpclient.execute(httpGet);  //TODO fix the cookie warning
 				HttpEntity entity1 = response.getEntity();
 				String htmlPageText = EntityUtils.toString(entity1);
 				
 				// Get the body text
 				String body = parser.getBodyTextFromPatchURL(htmlPageText);
-
-				// TODO do I need to format it at all?
 				
 				// Update the database with the body text
 				sql = "UPDATE PatchNotes SET body = ? WHERE url = ?";
 				stmt = conn.prepareStatement(sql);
 				stmt.setString(1, body);
 				stmt.setString(2, patchNoteURL);
-				stmt.executeUpdate(sql);*/
+				stmt.executeUpdate();
+				
+				// Clean-up the HTTP stuff
+				EntityUtils.consume(entity1);
+				response.close();	
 			}
 
 		} catch (Exception e) {
@@ -164,6 +186,8 @@ public class PatchNoteMain {
 		    try { if (conn != null) conn.close(); } catch (Exception e) {};
 		}
 	
-		System.out.println("Complete.");
+		System.out.println("Parsing complete for " + parser.getGameName());
 	}
+	
+	
 }

@@ -45,7 +45,7 @@ public class LOLPatchNoteParser implements IPatchNoteParser {
 			if( cells.size() == 5){
 
 				//String url = cells.get(4).select("a").first().attributes().get("href");
-				String url = "leagueoflegends.wikia.com"+cells.get(0).select("a").first().attributes().get("href");
+				String url = "http://leagueoflegends.wikia.com"+cells.get(0).select("a").first().attributes().get("href");
 				
 				// TODO do this with regex
 				// Returns the following format: "YYYY-MM-DD", or "MM-DD-YYYY", or "<Month> YYYY"
@@ -83,12 +83,11 @@ public class LOLPatchNoteParser implements IPatchNoteParser {
 
 	@Override
 	public String getBodyTextFromPatchURL(String htmlPageText) {
-		// TODO
-		
-		
-		
-		
-		return null;
+		Document doc = Jsoup.parse(htmlPageText);
+		Element article = doc.getElementById("WikiaArticle");
+		// Remove the box on the bottom which links to other pages
+		article.getElementsByAttributeValueContaining("class", "navbox hlist").remove();
+		return article.text();
 	}
 
 }
