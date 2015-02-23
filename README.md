@@ -48,6 +48,7 @@ TODO
 - Reddit (League of Legends): http://www.reddit.com/r/leagueoflegends
 - Reddit (World of Warcraft): http://www.reddit.com/r/wow/
 - Reddit (Team Fortress 2): http://www.reddit.com/r/tf2/
+
 (See https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/docs/data.txt for database format)
 
 
