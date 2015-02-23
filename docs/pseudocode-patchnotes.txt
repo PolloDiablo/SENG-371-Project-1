@@ -1,79 +1,61 @@
 Patch Note Data Mining:
 
-LOL:
-navigate to root 
-for each row in table
-  - get url
-  - get date
-  - get version-number/name
-  goto link
-  - get body text (no pictures or formatting, if possible)
-      http://stackoverflow.com/questions/18336956/get-visible-text-of-page-with-selenium-webdriver
-
-TF2:
-navigate to root 
-for each link in each sublist
-  - get url
-  - get date
-  - get version-number/name (if link is bolded, search top of page for match)
-  goto link
-  - get version-number/name (if applicable)
-  - get body text (no pictures or formatting, if possible)
-
-WOW:
-navigate to root 
-for each row in each table on each page
-  - get url
-  - get date
-  - get version-number/name (if applicable)
-  goto link
-  - get body text (no pictures or formatting, if possible)
-      
 =====================================
-COMMON ALGORITHM:
+COMMON ALGORITHM (between LOL, TF2, and WOW):
+(more detailed version below)
 for each root page
   get list of all patch pages
   iterate through list
     - get url
     - get date
     - get version-number/name (if applicable)
-  iterate through list
-    - goto url
+  goto url
     - get body text
-
 =====================================
-INTERFACE:
-public interface IPatchNoteParser{
-  /** Returns name of this game, will be the name of the database table entry*/
-  public abstract String getGameName();
-  
-  /** Returns the list of root page URLs, there must be at least one
-      Each root page includes links and information about many patches.*/
-  public abstract List<String> getRootPageURLs();
-  
-  /** 
-    Returns a list of details for each patch note from the root (the current page)
-    - url to full patch body (required)
-    - date (required)
-    - version-number/name (optional)
-  */
-  public abstract List<String[]> getPatchDetailsFromRoot(WebDriver driver);
-  
-  /** Get the body text from the patch (the current page)*/
-  public abstract String getBodyTextFromPatchURL(WebDriver driver);
-}
-=====================================
-IPatchNoteParser parser;
+- Turns out we can separate this into two parts
+1. Get the patch metadata (url, date, title/version)
+2. Get the patch body text
 
-ALGORITHM PART 1 (populate table of patches):
+ALGORITHM PART 1 (get patch metadata):
 - parser.getGameName();
 - parser.getRootPageURLs();
 - for each root page url
-  - parser.getPatchDetailsFromRoot(WebDriver driver);
+  - parser.getPatchDetailsFromRoot(String htmlPageText);
   - add details to database (each list item is a new entry in the table)
     - if row already exists, then update it
     
 ALGORITHM PART 2 (get patch bodies):
-- for each row in table (? recently updated only)
-  - go to url
-  parser.getBodyTextFromPatchURL(WebDriver driver);
+- for each row in table that has an empty body field:
+  go to url
+  - parser.getBodyTextFromPatchURL(String htmlPageText);
+
+=====================================
+INTERFACE:
+public interface IPatchNoteParser {
+	 
+	/** Returns name of this game, will be associated with each database row entry*/
+	public abstract String getGameName();
+	
+	/** Each game has a list of patch notes online.
+	 * This list often on one page, but may also be spread across multiple pages.
+	 * 
+	 * This function returns the list of the URLs to each of these "root" pages.
+	 * (Should be at least one)
+	 * 
+	 * */
+	public abstract List<String> getRootPageURLs();
+	
+	/** Input: a "root" page containing a list of links 
+	 * 		(and other meta information) for many patch notes
+	 *  
+	 *  Returns all of details for each patch note
+	 *  	- gameName (required, will be the same for all patch notes for a given dame)
+	 *  	- url to full patch body (required)
+	 *  	- date (required)
+	 *  	- version-number/name (optional)
+	 */
+	public abstract List<PatchNoteMetaData> getPatchDetailsFromRoot(String htmlPageText);
+	
+	/** Get the body text from the patch (the current page)*/
+	public abstract String getBodyTextFromPatchURL(String htmlPageText);
+}
