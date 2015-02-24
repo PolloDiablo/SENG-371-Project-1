@@ -9,11 +9,12 @@ These games each have an official avenue for reporting bugs/issues. However, pla
 I am trying to investigate how seriously developers really take this data, and if you can see the issues brought-up in forum posts later addressed in official patch notes.
 
 <h2>Project Question</h2>
-- Do developers respond to user feedback submitted through online forums
-- If so, how quickly?
-- Expansion: Do developers read comments and listen to their community?
-- Expansion: Does developer response to forums affect the popularity and life-span of a project?
-- Expansion: Which social platforms are most common for developers to read? Reddit, Twitter, Facebook, dedicated forums?
+Do developers respond to user feedback submitted through online forums by making changes to the product?
+Expansions:
+1. If so, how quickly?
+2. Do developers read comments and listen to their community?
+3. Does developer response to forums affect the popularity and life-span of a project?
+4. Which social platforms are most common for developers to read? Reddit, Twitter, Facebook, dedicated forums?
 
 <h3>Predictions</h3>
 - If there is NOT correlation between forum comments and patch notes, this could possibly indicate a few things:
@@ -22,8 +23,7 @@ I am trying to investigate how seriously developers really take this data, and i
   - The method used to parse/analyze data is ineffective (not looking at the right data points)
   
 <h2>Methodology</h2>
-Parts 1 and 2 are all done in Java (see Eclipse project in Git repo).
-TODO
+This project was entirely programmed in Java (see Eclipse project in Git repo).
 
 <h3>Main Idea</h3>
 1. Gather patch note data:
@@ -53,7 +53,7 @@ TODO
 3. The three files mentioned above are the "brains" of the project. 
   - ForumPostMain.java contains all the code necessary to scrape data from Reddit Posts and store it in the RedditPosts database table. The user (you or me) can implement the IRedditPostParser Interface. I have already created three examplar interfaces (LOLRedditPostParser, TF2RedditPostParser, and WOWRedditPostParser). However, by implementing your own interface, you should be able to scrape data from ANY subreddit.
   - PatchNoteMain.java contains all the code necessary to scrape data from Patch Notes and store it in the PatchNotes database table. The user (you or me) can implement the IPatchNoteParser Interface. I have already created three examplar interfaces (LOLPatchNoteParser, TF2PatchNoteParser, and WOWPatchNoteParser). However, by implementing your own interface, you should be able to scrape data from ANY patch note website.
-  - Once you have populated the two database tables, you can use Analyzer.java to create .csv files. These csv files can be opened in Microsoft Excel where you can create graphs. To use Analyzer.java, look for the "Search Settings" near the top of the code. Here you can specify which game you would like to look at (this gameName should correspond to the gameName specified in the previous two interfaces. Then you can choose the search term. Analyzer.java will look for occurences of the search term in the RedditPost and PatchNote data and plot these against time, and output into a .csv file). 
+  - Once you have populated the two database tables, you can use Analyzer.java to create .csv files. These csv files can be opened in Microsoft Excel where you can create graphs. To use Analyzer.java, look for the "Search Settings" near the top of the code. Here you can specify which game you would like to look at (this gameName should correspond to the gameName specified in the previous two interfaces. Then you can choose the search term. Analyzer.java will look for occurences of the search term in the RedditPost and PatchNote data and plot these against time, and output into a .csv file).
   - NOTE: I realize that the Interfaces and manual graph creation are both a bit clunky, these could both be improved as discussed in the "Future Work" section below.
 
 <h3>Data Sources</h3>
@@ -64,23 +64,70 @@ TODO
 - Reddit (World of Warcraft): http://www.reddit.com/r/wow/
 - Reddit (Team Fortress 2): http://www.reddit.com/r/tf2/
 
-In total, the resulting PatchNote database contains ### rows, where each rows corresponds to a single patch for a game. And the ForumPost database contains ### rows, where each row corresponds to a single Reddit post.
-TODO
+In total, the resulting PatchNote database contains <b>770 rows</b>, where each rows corresponds to a single patch for a game. And the ForumPost database contains <b>11523 rows</b>, where each row corresponds to a single Reddit post.
 (See https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/docs/data.txt for database format)
 
-
 <h2>Results of Experiment</h2>
-TODO
+For the data analysis I graphed:
+The weight occurences of Reddit posts per week, where the weight of a given post was equal to log10(numberOfComments)+log10(popularity). 
+AND
+Number of patches relased per week.
+vs.
+Time
 
-<h2>Analysis</h2>
-TODO - answers to questions
+For example, here is the resulting graph for the keyword "Ashe" in the League of Legends data:
+![LOL-ashe](https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/SENG371/analytics/LOL-ashe.png)
+
+Similarily, here is the resulting graph for the keyword "Mundo" in the League of Legends data:
+![LOL-mundo](https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/SENG371/analytics/LOL-mundo.png)
+
+Similarily, here is the resulting graph for the keyword "Morgana" in the League of Legends data:
+![LOL-morgana](https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/SENG371/analytics/LOL-morgana.png)
+
+(Ashe, Mundo, and Morgana are all playable characters in League of Legends)
+
+This is for the keyword "soldier" in the Team Fortress 2 data:
+![TF2-soldier](https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/SENG371/analytics/TF2-soldier.png)
+
+Find the rest of my graphs in:
+https://github.com/PolloDiablo/SENG-371-Project-1/tree/master/SENG371/analytics
+
+<h2>Analysis and Conclusion</h2>
+<i>Okay, I have pretty graphs, what now?...</i>
+
+First I'd like comment on some prevalent patterns in the data:
+1. Patches drive forum activity. It just makes sense. If the developers are making many changes to a feature, its bound to be a talking point for the game community. This is most clearly demonstrated in the difference between the LOL-sion graph and the LOL-morgana graph. Sion undergoes many changes, as a result there is a lot of activity in the forums. Morgana is much more stable and goes many weeks without any mention in the forums.
+2. Large spikes in forum activity are usually followed by a patch. This can be seen in the LOL-ashe graph. There are large spikes in February and November, each of which is followed by a patch.
+3. Successful patches are followed by a decrease in forum activity, whereas failed patches are followed by an increase. This is exemplified by the TF2-soldier data. You can see that some patches are followed by a spike in activity, whereas other patches are 
+
+Because of (2) above, I would say that the answer to my project question is <b>YES</b>. In many of the graphs you can see the pattern where there are some large spikes in forum activity relating to a feature, following by a patch. 
+This is especially true for League of Legends (who's developers have a reputation of high community-involvement), but more difficult to see in the Team Fortress 2 and World of Warcraft data. Perhaps because developers are less active in these forums, the users have less reason to create posts regarding bugs. Then it really becomes a chicken-egg problem. If developers find valuable bug report data in the forums, then they will be more likely to visit frequently. But the community is not going to post valuable bug reports if they do not think that developers will ever read them.
+
+Additionally, it should be noted that both Team Fortress 2 and World of Warcraft implement <b>in-game</b> bug-reporting as the primary way to give user feedback. League of Legends does not have this features, which perhaps encourages users to find other avenues of reaching the developers (such as Reddit).
+
+There are definitely pros/cons to both methods of receiving user feedback (dedicated bug submission forms vs. open user forums). 
+In-game Bug submission forms advantages:
+  - Can format the data in a very particular way which is very easy for developers to parse through
+  - Can sort/organize/prioritize feedback with ease
+  - Can simultaneously gather client system information as the bug is submitted
+
+User forum advantages:
+  - Easy to tell which bugs are the most important to the userbase (based on popularity of posts)
+  - Easy to tell which bugs are the most common/prevelant (based on number of posts)
+
+Ideally, a developer could gather information from both areas. Use the more "official" ingame bug reports to generate a list of bugs. Then use the forum comments to help prioritize each bug fix.
+
+
+Well, did I answer my project question? Partly, but not yet. As I will speak to in the following sections, there are many threats to vadility that must be addressed, and there is much opportunity for future work.
 
 <h3>Threats to Validity</h3>
+- Not very much reddit forum data was obtained for the TF2 and WOW subreddits compared to the Leeague of Legends data.  The League of Legends Reddit community is much more active, wheras the community for the other games may have other, more active forums besides Reddit. Small data sets are less useful statistically, and it is more difficult to draw conclusions from the data.
 - Developers may be getting their information from sources other than the forums. However, the forums might be providing a reflection of the other data source (because users will discuss the same thing in multiple places). Essentially: correlation =/= causation
 - The keywords used (bug, issue, and crash) will only capture a subset of user feedback. Users will discuss lots of other topics such as "game balance" which would not be represented in the data I acquired
 - Keyword searches do not take meaning into account (sarcasm, etc.)
 - The "score" of a forum post does not necessarily represent its validity/usefulness to developers, only its popularity
 - I just look for the appearance of a term in the patch note data. They could just be mentioning the term, but not actually making any changes. Again: it is difficult to ascertain <i>context/meaning</i> from text analytics.
+- Text matches may return false positives if a keyword is used for another purpose, or as a component of a larger word. For example "Ashe" could be part of "Crashes", and "Fizz" could describe a soda drink as well as a League of Legends character. One would have to hope that these false matches would only account for a small proportion of the overall data, so the results should still remain valid.
 
 <h3>Future Work</h3>
 - As mentioned in my instructions above, I created a primitive interface which allows users to pull data for ANY game. However, the interface is a little bit clunky, and there are some places where you actually need to go in and update my code (such as the database URL). With some modifications, I could turn this code into an actual Java library which would be much more useful and usable! 
@@ -89,9 +136,11 @@ TODO - answers to questions
   - League of Legends Forums: http://boards.na.leagueoflegends.com/
   - TF2 Forums? (TF2 forums don't have a good search feature, bugs are reported in-game and sent directly to the developers)
   - Other social media? Twitter? Facebook? etc.
+  - Each of these games
 - Find games which have an open developer issue tracker. This would give a better idea of how developers respond to legitimate user feedback and the progression that an issue goes through from initial report to patch/fix release
 - Parse data from Reddit (or other forums) that is older than 2013. This could allow us to see the evolution of a forum over time, as more game users start to gather there. Additionally, one could compare each forum for a given game and see usage trends as users migrate from one to another.
 - Have the tool automatically detect domain-specific words from the Patch Note or Reddit Post text. This would include a lot of game-specific slang that isn't in the common English dictionary. This could be useful for auto-generating graphs out of the database. However, this would be extremely difficult, because it would also need to recognize and ignore. abbreviations, slang, profanity, etc.
+- DTW (Dynamic Time Warping) is an algorithm that could be very useful in measuring the response time of developers to user input on forums. It essentially measures the "average offset" between two data sets. See: ![DTW](http://ej.iop.org/images/0957-0233/23/5/055601/Full/mst411675f2_online.jpg)
 
 <h2>Project Management Information</h2>
 
