@@ -19,9 +19,10 @@ Expansions:
 4. Which social platforms are most common for developers to read? Reddit, Twitter, Facebook, dedicated forums?
 
 <h3>Predictions</h3>
-- If there is NOT correlation between forum comments and patch notes, this could possibly indicate a few things:
+If there is NOT correlation between forum comments and patch notes, this could indicate a few things:
+
   - The developers are not paying attention to user feedback
-  - The developers ARE paying attention to user feedback, but users are not finding actual "bugs", so no fixes are required. This could indicate a disconnect between the priorities of the developers and the users
+  - The developers ARE paying attention to user feedback, but users are not finding actual "bugs", so no fixes are required (possibly revealing a disconnect between the priorities of the developers and the users)
   - The method used to parse/analyze data is ineffective (not looking at the right data points)
   
 <h2>Methodology</h2>
@@ -35,9 +36,10 @@ This project was entirely programmed in Java (see Eclipse project in Git repo).
 2. Forum/comment parsing:
   - I only had time to look at Reddit forums
   - I only looked back to the start of 2013, so I have data for approximately 2 years
-  - I ran one query per week, and grabbed the top 100 posts for that week
-  - I threw out any posts with score <1 (which means they were downvoted)
+  - Run one query per week, and grab the top 100 posts for that week
+  - Throw out any posts with score <1 (which means they were downvoted)
   - Example search:  "http://www.reddit.com/r/leagueoflegends/search?q=(and+timestamp:1421698435..1421784835+title:'bug||issue')&sort=top&restrict_sr=on&syntax=cloudsearch&limit=100"
+  - The Reddit API can return search results in JSON, cool!
   - See: https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/docs/pseudocode-forumposts.txt for more details
 3. Data analytics:
   - Once the SQL database is populated, it can be accessed in a multitude of ways
@@ -47,7 +49,7 @@ This project was entirely programmed in Java (see Eclipse project in Git repo).
     - For <b>League of Legends:</b> characters, skills/abilities/spells, maps, monsters, items, game types, patcher, PVP.Net, runes, masteries, bots, ping/connectino/latency, spectator mode, etc.
     - For <b>Team Fortress 2:</b> characters, maps, cosmetics, weapons, items, game types, source engine, store, crafting, bots, etc.
     - For <b>World of Warcraft:</b> classes, races, skills/spells, dungeons, raids, items/weaprons, pets, professions, talents, reputation, quests, monsters, areas/maps, achievements, PVP, PVE, auction house, guilds, arena, launcher, etc.
-    - Note: since these terms are specific to each game, you must have some knowledge of common game terminology before you can perform any kind of analysis.
+    - Note: since these terms are specific to each game, you must have some domain knowledge (of common game terminology) before you can perform any kind of analysis.
   
 <h3>Using My Code - Instructions</h3>
 1. This Git repo contains a Java Eclipse project titled "SENG371". It should contain all necessary library (jar) files required for the code to run.
@@ -56,7 +58,7 @@ This project was entirely programmed in Java (see Eclipse project in Git repo).
   - ForumPostMain.java contains all the code necessary to scrape data from Reddit Posts and store it in the RedditPosts database table. The user (you or me) can implement the IRedditPostParser Interface. I have already created three examplar interfaces (LOLRedditPostParser, TF2RedditPostParser, and WOWRedditPostParser). However, by implementing your own interface, you should be able to scrape data from ANY subreddit.
   - PatchNoteMain.java contains all the code necessary to scrape data from Patch Notes and store it in the PatchNotes database table. The user (you or me) can implement the IPatchNoteParser Interface. I have already created three examplar interfaces (LOLPatchNoteParser, TF2PatchNoteParser, and WOWPatchNoteParser). However, by implementing your own interface, you should be able to scrape data from ANY patch note website.
   - Once you have populated the two database tables, you can use Analyzer.java to create .csv files. These csv files can be opened in Microsoft Excel where you can create graphs. To use Analyzer.java, look for the "Search Settings" near the top of the code. Here you can specify which game you would like to look at (this gameName should correspond to the gameName specified in the previous two interfaces. Then you can choose the search term. Analyzer.java will look for occurences of the search term in the RedditPost and PatchNote data and plot these against time, and output into a .csv file).
-  - NOTE: I realize that the Interfaces and manual graph creation are both a bit clunky, these could both be improved as discussed in the "Future Work" section below.
+  - Note: I realize that the Interfaces and manual graph creation are both a bit clunky, these could both be improved as discussed in the "Future Work" section below.
 
 <h3>Data Sources</h3>
 - Patch Notes (League of Legends): http://leagueoflegends.wikia.com/wiki/Patch
@@ -66,27 +68,32 @@ This project was entirely programmed in Java (see Eclipse project in Git repo).
 - Reddit (World of Warcraft): http://www.reddit.com/r/wow/
 - Reddit (Team Fortress 2): http://www.reddit.com/r/tf2/
 
-In total, the resulting PatchNote database contains <b>770 rows</b>, where each rows corresponds to a single patch for a game. And the ForumPost database contains <b>11523 rows</b>, where each row corresponds to a single Reddit post.
+In total, the resulting PatchNote database table contains <b>770 rows</b>, where each rows corresponds to a single patch for a game. And the ForumPost database table contains <b>11523 rows</b>, where each row corresponds to a single Reddit post.
 (See https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/docs/data.txt for database format)
 
 <h2>Results of Experiment</h2>
 For the data analysis I graphed:
-The weight occurences of Reddit posts per week, where the weight of a given post was equal to log10(numberOfComments)+log10(popularity). 
+
+Weighted occurences of Reddit posts, where the weight of a post = log10(numberOfComments)+log10(popularity). 
+
 AND
-Number of patches relased per week.
+
+Number of patches relased (usually just one at a time)
+
 vs.
-Time
+
+Time (weeks)
 
 For example, here is the resulting graph for the keyword "Ashe" in the League of Legends data:
 ![LOL-ashe](https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/SENG371/analytics/LOL-ashe.png)
 
-Similarily, here is the resulting graph for the keyword "Mundo" in the League of Legends data:
+"Mundo" in the League of Legends data:
 ![LOL-mundo](https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/SENG371/analytics/LOL-mundo.png)
 
-Similarily, here is the resulting graph for the keyword "Morgana" in the League of Legends data:
+"Morgana" in the League of Legends data:
 ![LOL-morgana](https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/SENG371/analytics/LOL-morgana.png)
 
-(Ashe, Mundo, and Morgana are all playable characters in League of Legends)
+Note: Ashe, Mundo, and Morgana are all playable characters in League of Legends.
 
 This is for the keyword "soldier" in the Team Fortress 2 data:
 ![TF2-soldier](https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/SENG371/analytics/TF2-soldier.png)
@@ -94,10 +101,13 @@ This is for the keyword "soldier" in the Team Fortress 2 data:
 Find the rest of my graphs in:
 https://github.com/PolloDiablo/SENG-371-Project-1/tree/master/SENG371/analytics
 
+The graphs are titled "<Game Abbreviation>-<Search Term>.png"
+
 <h2>Analysis and Conclusion</h2>
 <i>Okay, I have pretty graphs, what now?...</i>
 
 First I'd like comment on some prevalent patterns in the data:
+
 1. Patches drive forum activity. It just makes sense. If the developers are making many changes to a feature, its bound to be a talking point for the game community. This is most clearly demonstrated in the difference between the LOL-sion graph and the LOL-morgana graph. Sion undergoes many changes, as a result there is a lot of activity in the forums. Morgana is much more stable and goes many weeks without any mention in the forums.
 2. Large spikes in forum activity are usually followed by a patch. This can be seen in the LOL-ashe graph. There are large spikes in February and November, each of which is followed by a patch.
 3. Successful patches are followed by a decrease in forum activity, whereas failed patches are followed by an increase. This is exemplified by the TF2-soldier data. You can see that some patches are followed by a spike in activity, whereas other patches are 
