@@ -5,12 +5,14 @@
 <h3>Context</h3>
 Popular online games such as League of Legends (released 2009), Team Fortress 2 (released 2007), or World of Warcraft (released 2004) all have one thing in common: the developers consistently release patches to improve the game. These improvments can come in the form of bugfixes, minor balance tweaks, character reworks, performance improvements, and even entirely new features and game modes.
 Players of these games often like to discuss with one another through online forums. Some developers have hosted their own forums for players to congregate, but players may also use 3rd-party websites (such as Reddit) to talk with one another.
-These games each have an official avenue for reporting bugs/issues. However, players will often use forums instead. This allows them to determine if anyone else had the same issue, and to work together to reproduce bugs, find workarounds, and possibly find exploits. Discussing bugs in an open forum provides a valuable resource for developers, as they can acquire data as well as interact with the gaming community.
-I am trying to investigate how seriously developers really take this data, and if you can see the issues brought-up in forum posts later addressed in official patch notes.
+These games each have an official avenue for reporting bugs/issues. However, players will often use forums instead. This allows them to determine if anyone else had the same issue, work together to reproduce bugs, find workarounds, and possibly find exploits. Discussing bugs in an open forum provides a valuable resource for developers, as they can acquire data as well as interact with the gaming community.
+
+I am trying to investigate how seriously developers really take this data, and if you can see the common bug-related topics in forum posts are later addressed in official patches.
 
 <h2>Project Question</h2>
 Do developers respond to user feedback submitted through online forums by making changes to the product?
 Expansions:
+
 1. If so, how quickly?
 2. Do developers read comments and listen to their community?
 3. Does developer response to forums affect the popularity and life-span of a project?
