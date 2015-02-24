@@ -36,9 +36,9 @@ This project was entirely programmed in Java (see Eclipse project in Git repo).
 2. Forum/comment parsing:
   - I only had time to look at Reddit forums
   - I only looked back to the start of 2013, so I have data for approximately 2 years
-  - Run one query per week, and grab the top 100 posts for that week
+  - Run one query per week, and grab the top 100 posts for that week which contain any of the keywords "bug", "issue", or "crash" in the post title
   - Throw out any posts with score <1 (which means they were downvoted)
-  - Example search:  "http://www.reddit.com/r/leagueoflegends/search?q=(and+timestamp:1421698435..1421784835+title:'bug||issue')&sort=top&restrict_sr=on&syntax=cloudsearch&limit=100"
+  - Example search:  "http://www.reddit.com/r/leagueoflegends/search.json?q=(and+timestamp:1421698435..1421784835+title:'bug||issue||crash')&sort=top&restrict_sr=on&syntax=cloudsearch&limit=100"
   - The Reddit API can return search results in JSON, cool!
   - See: https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/docs/pseudocode-forumposts.txt for more details
 3. Data analytics:
