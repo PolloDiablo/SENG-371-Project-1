@@ -20,10 +20,10 @@ public class Analyzer {
 	
 	//===================================
 	//Search settings
-	private static final String gameName = "World of Warcraft";	// Used in the database search
-	private static final String gameNameShort = "WOW";			// Reflected in the file name
+	private static final String gameName = "League of Legends";	// Used in the database search
+	private static final String gameNameShort = "LOL";			// Reflected in the file name
 	
-	private static final String term = "shaman";					// The term to look for in both the Reddit Posts and Patch Notes
+	private static final String term = "ashe ";					// The term to look for in both the Reddit Posts and Patch Notes
 	//===================================
 	
 	public static void main(String[] args) {	
