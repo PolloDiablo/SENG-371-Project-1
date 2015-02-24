@@ -100,7 +100,7 @@ This is for the keyword "soldier" in the Team Fortress 2 data:
 Find the rest of my graphs in:
 https://github.com/PolloDiablo/SENG-371-Project-1/tree/master/SENG371/analytics
 
-The graphs are titled "<Game Abbreviation>-<Search Term>.png"
+The graphs are titled "GameAbbreviation-SearchTerm.png"
 
 <h2>Analysis and Conclusion</h2>
 <i>Okay, I have pretty graphs, what now?...</i>
