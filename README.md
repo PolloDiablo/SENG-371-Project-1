@@ -109,25 +109,14 @@ First I'd like comment on some prevalent patterns in the data:
 
 1. Patches drive forum activity. It just makes sense. If the developers are making many changes to a feature, its bound to be a talking point for the game community. This is most clearly demonstrated in the difference between the LOL-sion graph and the LOL-morgana graph. Sion undergoes many changes, as a result there is a lot of activity in the forums. Morgana is much more stable and goes many weeks without any mention in the forums.
 2. Large spikes in forum activity are usually followed by a patch. This can be seen in the LOL-ashe graph. There are large spikes in February and November, each of which is followed by a patch.
-3. Successful patches are followed by a decrease in forum activity, whereas failed patches are followed by an increase. This is exemplified by the TF2-soldier data. You can see that some patches are followed by a spike in activity, whereas other patches are 
+3. Successful patches are followed by a decrease in forum activity, whereas failed patches are followed by an increase. This is exemplified by the TF2-soldier data. You can see that some patches are followed by a spike in activity, whereas other patches are followed by a stretch of zero forum activity.
 
 Because of (2) above, I would say that the answer to my project question is <b>YES</b>. In many of the graphs you can see the pattern where there are some large spikes in forum activity relating to a feature, following by a patch. 
-This is especially true for League of Legends (who's developers have a reputation of high community-involvement), but more difficult to see in the Team Fortress 2 and World of Warcraft data. Perhaps because developers are less active in these forums, the users have less reason to create posts regarding bugs. Then it really becomes a chicken-egg problem. If developers find valuable bug report data in the forums, then they will be more likely to visit frequently. But the community is not going to post valuable bug reports if they do not think that developers will ever read them.
+This is especially visible for League of Legends (who's developers have a reputation for high community-involvement), but more difficult to see in the Team Fortress 2 and World of Warcraft data. Perhaps this is because developers are less active in these forums, so the users have less incentive to create posts regarding bugs. Therefore it really becomes a chicken-egg problem: if developers find valuable user feedback in the forums, then they will be more likely to visit frequently. But the community is not going to post valuable bug reports if they do not think that developers will ever read them.
 
 Additionally, it should be noted that both Team Fortress 2 and World of Warcraft implement <b>in-game</b> bug-reporting as the primary way to give user feedback. League of Legends does not have this features, which perhaps encourages users to find other avenues of reaching the developers (such as Reddit).
 
-There are definitely pros/cons to both methods of receiving user feedback (dedicated bug submission forms vs. open user forums). 
-In-game Bug submission forms advantages:
-  - Can format the data in a very particular way which is very easy for developers to parse through
-  - Can sort/organize/prioritize feedback with ease
-  - Can simultaneously gather client system information as the bug is submitted
-
-User forum advantages:
-  - Easy to tell which bugs are the most important to the userbase (based on popularity of posts)
-  - Easy to tell which bugs are the most common/prevelant (based on number of posts)
-
-Ideally, a developer could gather information from both areas. Use the more "official" ingame bug reports to generate a list of bugs. Then use the forum comments to help prioritize each bug fix.
-
+There are definitely pros/cons to both methods of receiving user feedback (dedicated bug submission forms vs. open user forums). In-game Bug submission forms allow evelopers to format the data in a very particular way which is easy to sort, and prioritize later on. They can also simultaneously gather client system information as the bug is submitted. User forums however offer the ability to tell which bugs are the most common as well as which bugs are the most important to the userbase (based on popularity of posts). Ideally, a developer could gather information from both areas. Use the more "official" ingame bug reports to generate a list of bugs. Then use the forum comments to help prioritize each bug fix.
 
 Well, did I answer my project question? Partly, but not yet. As I will speak to in the following sections, there are many threats to vadility that must be addressed, and there is much opportunity for future work.
 
