@@ -9,10 +9,10 @@ import java.sql.ResultSet;
 
 public class Analyzer {
 
-	private static final long startDate = 1356854400; 	// Dec. 30 2012, i.e. ~start of 1st week of 2013
+	//private static final long startDate = 1356854400; 	// Dec. 30 2012, i.e. ~start of 1st week of 2013
 	//private static final long endDate = 1424678400; 	// Fen, 23 2015
 	
-	//private static final long startDate = 1388563200; 	//Start of 2014
+	private static final long startDate = 1388563200; 	//Start of 2014
 	private static final long endDate = 1420099200;		//Start of 2015
 	
 	private static final int secondsInWeek = 60*60*24*7; //604800
@@ -20,10 +20,10 @@ public class Analyzer {
 	
 	//===================================
 	//Search settings
-	private static final String gameName = "League of Legends";	// Used in the database search
-	private static final String gameNameShort = "LOL";			// Reflected in the file name
+	private static final String gameName = "World of Warcraft";	// Used in the database search
+	private static final String gameNameShort = "WOW";			// Reflected in the file name
 	
-	private static final String term = "shen";					// The term to look for in both the Reddit Posts and Patch Notes
+	private static final String term = "shaman";					// The term to look for in both the Reddit Posts and Patch Notes
 	//===================================
 	
 	public static void main(String[] args) {	
@@ -45,12 +45,11 @@ public class Analyzer {
 			long dateLowerBound = startDate;
 			long dateUpperBound = startDate + secondsInWeek;
 			
-			String output= "";
+			String output= ",Reddit Activity, Patch Releases\n";		
 			
 			System.out.println("Performing queries...");
-			
 			// Each time period corresponds to one row in the resulting data table
-			while(dateUpperBound <= endDate){	
+			while(dateUpperBound <= endDate){
 				Date sqlDateLowerBound = new Date(dateLowerBound*1000);
 				Date sqlDateUpperBound = new Date(dateUpperBound*1000);
 				
@@ -93,11 +92,11 @@ public class Analyzer {
 					if(rs.getInt("popularity")>0){
 						score += Math.log10(rs.getInt("popularity"));
 					}
+
 				}
-				
+
 				// Write the RedditPost score for this time period
 				output += (score + ",");
-				
 				
 				//=========================================
 				// Look at Patch Notes
@@ -114,6 +113,7 @@ public class Analyzer {
 				
 				// Write how many (if any) patches were released during this time period
 				while(rs.next()){
+					
 					if(rs.getInt("total")>0){
 						output += rs.getInt("total");
 					}
@@ -124,7 +124,6 @@ public class Analyzer {
 				// Go to the next week
 				dateLowerBound += secondsInWeek;
 				dateUpperBound += secondsInWeek;
-				
 			}
 			
 			
@@ -137,8 +136,6 @@ public class Analyzer {
 			
 			//TODO instead of writing to csv, I could probably write to xlsx, and maybe even pre-create the graphs?
 			//TODO or can I generate graphs from Java here?
-			
-			
 		
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -151,5 +148,40 @@ public class Analyzer {
 		System.out.println("Complete.");
 		
 	}
+	
+	/* Dynamic Time Warping
+	 * http://en.wikipedia.org/wiki/Dynamic_time_warping
+	 * Given two sequences of numbers, returns the "average offset"
+	 */
+	private static int DTWDistance(int[] s, int[] t) {
+
+	    int[][] DTW = new int[s.length][t.length];
+
+	    for(int i = 1 ; i < s.length ; i++){
+	        DTW[i][0] = Integer.MAX_VALUE;
+	    }
+	    for(int j = 1 ; j < t.length ; j++){
+	        DTW[0][j] = Integer.MAX_VALUE;
+	    }
+	    DTW[0][0] = 0;
+
+	    for(int i = 1 ; i < s.length ; i++){
+	    	 for(int j = 1 ; j < t.length ; j++){
+	            int cost = Math.abs( s[i] - t[j] );
+	            DTW[i][j] = cost + minimum(DTW[i-1][j],    // insertion
+	                                        DTW[i][j-1],    // deletion
+	                                        DTW[i-1][j-1]);    // match
+	    	 }
+	    }
+	    return DTW[s.length-1][t.length-1];
+	}
+	    	 
+	private static int minimum(int a, int b, int c){
+		int smallest = a;
+		if (smallest > b) smallest = b;
+		if (smallest > c) smallest = c;
+		return smallest;
+	}
+	    	 
 	
 }
