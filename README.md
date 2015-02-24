@@ -73,17 +73,15 @@ In total, the resulting PatchNote database table contains <b>770 rows</b>, where
 
 <h2>Results of Experiment</h2>
 For the data analysis I graphed:
-
-Weighted occurences of Reddit posts, where the weight of a post = log10(numberOfComments)+log10(popularity). 
-
+```
+Weighted occurences of Reddit posts, where weight = log10(numberOfComments)+log10(popularity)
 AND
-
 Number of patches relased (usually just one at a time)
 
 vs.
 
 Time (weeks)
-
+```
 For example, here is the resulting graph for the keyword "Ashe" in the League of Legends data:
 ![LOL-ashe](https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/SENG371/analytics/LOL-ashe.png)
 
