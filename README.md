@@ -25,6 +25,7 @@ I am trying to investigate how seriously developers really take this data, and i
 Parts 1 and 2 are all done in Java (see Eclipse project in Git repo).
 TODO
 
+<h3>Main Idea</h3>
 1. Gather patch note data:
   - Get the following for each patch: url, date/time, title, body (most important)
   - See: https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/docs/pseudocode-patchnotes.txt for more details details
@@ -37,9 +38,23 @@ TODO
   - Example search:  "http://www.reddit.com/r/leagueoflegends/search?q=(and+timestamp:1421698435..1421784835+title:'bug||issue')&sort=top&restrict_sr=on&syntax=cloudsearch&limit=100"
   - See: https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/docs/pseudocode-forumposts.txt for more details
 3. Data analytics:
-  - TODO
-  - Text analytics: http://provalisresearch.com/products/qualitative-data-analysis-software/freeware/
-  - Can generate various graphs, looks for trends in the data
+  - Once the SQL database is populated, it can be accessed in a multitude of ways
+  - I decided to query the database using Java (since I already had Java successfully communicating with the database, this was the quickest)
+  - Using various queries it is possible to count the occurences of keywords in both the Patch Notes and Reddit Posts and plot these both against time (see Results section below for full details). 
+  - For best results, keywords should be game-specific terminology that would not regularily appear in speech. Here are some examples:
+    - For <b>League of Legends:</b> characters, skills/abilities/spells, maps, monsters, items, game types, patcher, PVP.Net, runes, masteries, bots, ping/connectino/latency, spectator mode, etc.
+    - For <b>Team Fortress 2:</b> characters, maps, cosmetics, weapons, items, game types, source engine, store, crafting, bots, etc.
+    - For <b>World of Warcraft:</b> classes, races, skills/spells, dungeons, raids, items/weaprons, pets, professions, talents, reputation, quests, monsters, areas/maps, achievements, PVP, PVE, auction house, guilds, arena, launcher, etc.
+    - Note: since these terms are specific to each game, you must have some knowledge of common game terminology before you can perform any kind of analysis.
+  
+<h3>Using My Code - Instructions</h3>
+1. This Git repo contains a Java Eclipse project titled "SENG371". It should contain all necessary library (jar) files required for the code to run.
+2. The code requires access to a SQLEXPRESS database with 2 tables created (as defined in the "data.txt" document). Personally, I setup this database using Microsoft SQL Server 2014 Express. The connection string is a variable titled "databaseURL" in ForumPostMain.java, PatchNoteMain.java, and Analyzer.java.
+3. The three files mentioned above are the "brains" of the project. 
+  - ForumPostMain.java contains all the code necessary to scrape data from Reddit Posts and store it in the RedditPosts database table. The user (you or me) can implement the IRedditPostParser Interface. I have already created three examplar interfaces (LOLRedditPostParser, TF2RedditPostParser, and WOWRedditPostParser). However, by implementing your own interface, you should be able to scrape data from ANY subreddit.
+  - PatchNoteMain.java contains all the code necessary to scrape data from Patch Notes and store it in the PatchNotes database table. The user (you or me) can implement the IPatchNoteParser Interface. I have already created three examplar interfaces (LOLPatchNoteParser, TF2PatchNoteParser, and WOWPatchNoteParser). However, by implementing your own interface, you should be able to scrape data from ANY patch note website.
+  - Once you have populated the two database tables, you can use Analyzer.java to create .csv files. These csv files can be opened in Microsoft Excel where you can create graphs. To use Analyzer.java, look for the "Search Settings" near the top of the code. Here you can specify which game you would like to look at (this gameName should correspond to the gameName specified in the previous two interfaces. Then you can choose the search term. Analyzer.java will look for occurences of the search term in the RedditPost and PatchNote data and plot these against time, and output into a .csv file). 
+  - NOTE: I realize that the Interfaces and manual graph creation are both a bit clunky, these could both be improved as discussed in the "Future Work" section below.
 
 <h3>Data Sources</h3>
 - Patch Notes (League of Legends): http://leagueoflegends.wikia.com/wiki/Patch
@@ -49,6 +64,8 @@ TODO
 - Reddit (World of Warcraft): http://www.reddit.com/r/wow/
 - Reddit (Team Fortress 2): http://www.reddit.com/r/tf2/
 
+In total, the resulting PatchNote database contains ### rows, where each rows corresponds to a single patch for a game. And the ForumPost database contains ### rows, where each row corresponds to a single Reddit post.
+TODO
 (See https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/docs/data.txt for database format)
 
 
@@ -66,12 +83,15 @@ TODO - answers to questions
 - I just look for the appearance of a term in the patch note data. They could just be mentioning the term, but not actually making any changes. Again: it is difficult to ascertain <i>context/meaning</i> from text analytics.
 
 <h3>Future Work</h3>
+- As mentioned in my instructions above, I created a primitive interface which allows users to pull data for ANY game. However, the interface is a little bit clunky, and there are some places where you actually need to go in and update my code (such as the database URL). With some modifications, I could turn this code into an actual Java library which would be much more useful and usable! 
+- Similar to above, Analyzer.java (which creates the graphs from database data) currently requires you to manually change the search parameters in the code. But a simple UI could probabably be created which allows the user to just specify the search options. It could also generate the graphs directly as images, rather than writing to .csv files and forcing the user to use Excel to create the graphs manually.
 - Look at a variety of other forums and social media which players use to discuss video games and provide feedback to developers
   - League of Legends Forums: http://boards.na.leagueoflegends.com/
   - TF2 Forums? (TF2 forums don't have a good search feature, bugs are reported in-game and sent directly to the developers)
   - Other social media? Twitter? Facebook? etc.
 - Find games which have an open developer issue tracker. This would give a better idea of how developers respond to legitimate user feedback and the progression that an issue goes through from initial report to patch/fix release
-- Parse data from Reddit (or other forums) that is older than 2013. This could allow us to see the evolution of a forum over time, as more game users start to gather there. Additionally, one could compare each forum for a given game and see usage trends as users migrate from one to another
+- Parse data from Reddit (or other forums) that is older than 2013. This could allow us to see the evolution of a forum over time, as more game users start to gather there. Additionally, one could compare each forum for a given game and see usage trends as users migrate from one to another.
+- Have the tool automatically detect domain-specific words from the Patch Note or Reddit Post text. This would include a lot of game-specific slang that isn't in the common English dictionary. This could be useful for auto-generating graphs out of the database. However, this would be extremely difficult, because it would also need to recognize and ignore. abbreviations, slang, profanity, etc.
 
 <h2>Project Management Information</h2>
 
