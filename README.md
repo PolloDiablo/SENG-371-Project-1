@@ -121,10 +121,10 @@ There are definitely pros/cons to both methods of receiving user feedback (dedic
 Well, did I answer my project question? Partly, but not yet. As I will speak to in the following sections, there are many threats to vadility that must be addressed, and there is much opportunity for future work.
 
 <h3>Threats to Validity</h3>
-- Not very much reddit forum data was obtained for the TF2 and WOW subreddits compared to the Leeague of Legends data.  The League of Legends Reddit community is much more active, wheras the community for the other games may have other, more active forums besides Reddit. Small data sets are less useful statistically, and it is more difficult to draw conclusions from the data.
-- Developers may be getting their information from sources other than the forums. However, the forums might be providing a reflection of the other data source (because users will discuss the same thing in multiple places). Essentially: correlation =/= causation
-- The keywords used (bug, issue, and crash) will only capture a subset of user feedback. Users will discuss lots of other topics such as "game balance" which would not be represented in the data I acquired
-- Keyword searches do not take meaning into account (sarcasm, etc.)
+- Not very much reddit forum data was obtained for the TF2 and WOW subreddits compared to the Leeague of Legends data.  The League of Legends Reddit community is highly active, whereas the community for the other two games shows low activity and must primarily congregate on different websites. Small data sets are less useful statistically, and it is more difficult to draw conclusions from the data.
+- Developers may be getting their user feedback from sources besides forums. However, the forums might still be providing a reflection of the other data source (because users will discuss the same thing in multiple places). So just because Reddit shows a spike in activity before a patch release, doesn't necessarily mean Reddit was the primary cause. Essentially: correlation =/= causation.
+- The keywords used to grab data from Reddit (bug, issue, and crash) will only capture a subset of user feedback. Users will discuss lots of other topics such as "game balance" which would not be represented in the data I acquired
+- Keyword searches do not take meaning into account (sarcasm, etc.).
 - The "score" of a forum post does not necessarily represent its validity/usefulness to developers, only its popularity
 - I just look for the appearance of a term in the patch note data. They could just be mentioning the term, but not actually making any changes. Again: it is difficult to ascertain <i>context/meaning</i> from text analytics.
 - Text matches may return false positives if a keyword is used for another purpose, or as a component of a larger word. For example "Ashe" could be part of "Crashes", and "Fizz" could describe a soda drink as well as a League of Legends character. One would have to hope that these false matches would only account for a small proportion of the overall data, so the results should still remain valid.
@@ -137,10 +137,12 @@ Well, did I answer my project question? Partly, but not yet. As I will speak to 
   - TF2 Forums? (TF2 forums don't have a good search feature, bugs are reported in-game and sent directly to the developers)
   - Other social media? Twitter? Facebook? etc.
   - Each of these games
-- Find games which have an open developer issue tracker. This would give a better idea of how developers respond to legitimate user feedback and the progression that an issue goes through from initial report to patch/fix release
-- Parse data from Reddit (or other forums) that is older than 2013. This could allow us to see the evolution of a forum over time, as more game users start to gather there. Additionally, one could compare each forum for a given game and see usage trends as users migrate from one to another.
-- Have the tool automatically detect domain-specific words from the Patch Note or Reddit Post text. This would include a lot of game-specific slang that isn't in the common English dictionary. This could be useful for auto-generating graphs out of the database. However, this would be extremely difficult, because it would also need to recognize and ignore. abbreviations, slang, profanity, etc.
-- DTW (Dynamic Time Warping) is an algorithm that could be very useful in measuring the response time of developers to user input on forums. It essentially measures the "average offset" between two data sets. See: ![DTW](http://ej.iop.org/images/0957-0233/23/5/055601/Full/mst411675f2_online.jpg)
+- Find games which have an open developer issue tracker. This would give a better idea of how developers respond to legitimate user feedback and the progression that an issue goes through internally from initial report to patch/fix release
+- Parse data from Reddit (or other forums) that is older than 2013. This could allow us to see the evolution of a forum over time, as more game users start to gather there (do the developers follow the users?) Additionally, one could compare each forum for a given game and see usage trends as users migrate from one to another.
+- Have the tool automatically detect domain-specific words from the Patch Note or Reddit Post text. This would find the game-specific slang that isn't in the common English dictionary. This could be useful for auto-generating graphs out of the database. However, this would be extremely difficult, because it would also need to recognize and ignore: abbreviations, slang, profanity, etc.
+- DTW (Dynamic Time Warping) is an algorithm that could be very useful in measuring the response time of developers to user input on forums. It essentially measures the "average offset" between two data sets. See:
+
+![DTW](http://ej.iop.org/images/0957-0233/23/5/055601/Full/mst411675f2_online.jpg)
 
 <h2>Project Management Information</h2>
 
@@ -158,7 +160,7 @@ Well, did I answer my project question? Partly, but not yet. As I will speak to 
 - (Feb 22) Report on results/findings
 
 <h3>Roles of Team Members</h3>
-- Jeremy Kroeker: all the things
+- Jeremy Kroeker: all the things :P
 
 <h3>Resources</h3>
 - How to format Reddit searches: https://github.com/reddit/reddit/blob/master/r2/r2/lib/cloudsearch.py#L172
