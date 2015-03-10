@@ -8,7 +8,7 @@ TODO Other things we could work on:
 
 <h3>Friday March 13</h3>
   - <b>Brayden</b>: subreddit monitoring tool which will detect spikes in activity and notify developers
-  - <b>Jeremy</b>: automated keyword graph creation using JFree Chart library
+  - <b>Jeremy</b>: automated keyword graph creation using JFree Chart library. Also some refactoring (renaming, organization, etc. of project files in Eclipse project).
 
 <h3>Tuesday March 17</h3>
   - <b>Brayden</b>: TODO
