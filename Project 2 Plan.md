@@ -1,5 +1,11 @@
 <h2>Plan</h2>
 
+TODO Other things we could work on:
+- Research other methods of obtaining patch data (e.g. internal bug tracking tools, Jira, GitHub issues, etc.)
+- Create a tool/UI for parsing Reddit data 
+  - user inputs subreddit name, game name (not really necessary, could just use subreddit name), start date, end date, and keywords to look for (defaults are "bug", "issue", "and crash")
+  - does the user also specify the database they would like to connect to?
+
 <h3>Friday March 13</h3>
   - <b>Brayden</b>: subreddit monitoring tool which will detect spikes in activity and notify developers
   - <b>Jeremy</b>: automated keyword graph creation using JFree Chart library
@@ -19,15 +25,17 @@
     
 <h3>Friday March 20</h3>
   - <b>Brayden</b>: TODO
-  - <b>Jeremy</b>: automate creation of alternative visualization types
+  - <b>Jeremy</b>: automate creation of alternative visualization types (with a tool)
     - User could enter a list of terms (this is would be time-consuming, any better way to do this?)
- 
-<h3>Tuesday March 24</h3>
-  - <b>Brayden</b>: TODO
-  - <b>Jeremy</b>: create tool for graph creation
     - Tool could automatically detect # of terms
       - If only 1 search term, do a graph of that term over time
       - If multiple search terms, autogenerate some of the alternative graphs
+    - In absence of Patch Note data, what graphs can be generated from just Reddit data?
+ 
+<h3>Tuesday March 24</h3>
+  - <b>Brayden</b>: TODO
+  - <b>Jeremy</b>: Investigation of non-gaming projects using current toolset
+
 
 <h3>Friday March 27</h3>
   - <b>Brayden and Jeremy</b>: Draft of project report/presentation?
