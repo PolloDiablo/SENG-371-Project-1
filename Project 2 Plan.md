@@ -11,11 +11,11 @@
   <tr>
     <td>Subreddit Monitoring Tool</td>
     <td>10</td> 
-    <td>8</td>
+    <td>10</td>
     <td>required</td>
   </tr>
   <tr>
-    <td>Auotmated Graph Ceation</td>
+    <td>Auotmated Graph Creation</td>
     <td>10</td> 
     <td>6</td>
     <td>required</td>
@@ -46,9 +46,9 @@
   </tr>
   <tr>
     <td>Tool/UI to Parse Reddit Data</td>
-    <td>4</td> 
-    <td>9</td>
-    <td>optional</td>
+    <td>7</td> 
+    <td>10</td>
+    <td>required</td>
   </tr>
   <tr>
     <td>Final Report/Video</td>
