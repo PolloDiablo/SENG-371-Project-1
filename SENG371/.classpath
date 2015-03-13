@@ -15,5 +15,8 @@
 	<classpathentry kind="lib" path="jsoup-1.8.1.jar"/>
 	<classpathentry kind="lib" path="sqljdbc4.jar"/>
 	<classpathentry kind="lib" path="java-json.jar"/>
+	<classpathentry kind="lib" path="jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="jfreechart-1.0.19.jar"/>
+	<classpathentry kind="lib" path="javax.mail.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

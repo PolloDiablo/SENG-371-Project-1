@@ -16,9 +16,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import jeremy.custom.parsers.LOLRedditPostParser;
-import jeremy.custom.parsers.TF2RedditPostParser;
-import jeremy.custom.parsers.WOWRedditPostParser;
 
 
 public class ForumPostMain {

@@ -1,4 +1,4 @@
-package jeremy.custom.parsers;
+package jeremy.seng371.part1;
 
 import java.sql.Date;
 import java.text.DateFormat;
@@ -9,13 +9,13 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import jeremy.seng371.part1.PatchNoteMain.PatchNoteMetaData;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import jeremy.seng371.part1.IPatchNoteParser;
-import jeremy.seng371.part1.PatchNoteMain.PatchNoteMetaData;
 
 public class WOWPatchNoteParser implements IPatchNoteParser {
 	

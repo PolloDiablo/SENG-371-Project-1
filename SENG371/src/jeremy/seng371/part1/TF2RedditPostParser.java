@@ -1,6 +1,5 @@
-package jeremy.custom.parsers;
+package jeremy.seng371.part1;
 
-import jeremy.seng371.part1.IRedditPostParser;
 
 public class TF2RedditPostParser implements IRedditPostParser {
 	@Override

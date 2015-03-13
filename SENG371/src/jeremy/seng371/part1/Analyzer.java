@@ -1,4 +1,4 @@
-package jeremy.seng371.analytics;
+package jeremy.seng371.part1;
 
 import java.io.PrintWriter;
 import java.sql.Connection;

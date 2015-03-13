@@ -24,9 +24,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
 
-import jeremy.custom.parsers.LOLPatchNoteParser;
-import jeremy.custom.parsers.TF2PatchNoteParser;
-import jeremy.custom.parsers.WOWPatchNoteParser;
 
 public class PatchNoteMain {
 

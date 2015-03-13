@@ -1,4 +1,4 @@
-package jeremy.seng371.part1;
+package awesome.seng371.part2;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -12,7 +12,6 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import jeremy.custom.parsers.LOLRedditPostParser;
 
 import java.util.*;
 
@@ -20,6 +19,9 @@ import javax.mail.*;
 import javax.mail.internet.*;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+
+import jeremy.seng371.part1.IRedditPostParser;
+import jeremy.seng371.part1.LOLRedditPostParser;
 
 
 
