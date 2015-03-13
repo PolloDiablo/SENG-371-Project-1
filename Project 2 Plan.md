@@ -63,7 +63,7 @@
   - <b>Jeremy</b>: <b>Auotmated Graph Ceation</b> (for keyword graphs) using JFree Chart library. Also some refactoring (renaming, organization, etc. of project files in Eclipse project).
 
 <h3>Tuesday March 17</h3>
-  - <b>Brayden</b>: <b>Creation of gui</b> for both monitoring tool and graph creator
+  - <b>Brayden</b>: Begin work on creation of a GUI to make the tool easy to use and more robust
   - <b>Jeremy</b>: <b>Research Alternate Visualization</b> types which can be obtained from existing data. Create a few sample charts to demonstrate that the data analysis method is valid.
     - Compare bug mention activity between keywords of the same category (e.g. characters, maps, or items). 
     This list could be complete (e.g. all the maps), or a subset of the keywords in the category (e.g. a few of the maps).
@@ -76,7 +76,7 @@
     (Their proportion would be relatively low).
     
 <h3>Friday March 20</h3>
-  - <b>Brayden</b>: TODO
+  - <b>Brayden</b>: <b>Creation of GUI</b> for both monitoring tool and graph creator
   - <b>Jeremy</b>: <b>Implement Alternate Visualization</b> types (with a tool, ideally automated)
     - User could enter a list of terms (this is would be time-consuming, any better way to do this?)
     - Tool could automatically detect # of terms
