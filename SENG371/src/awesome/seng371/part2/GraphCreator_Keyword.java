@@ -38,13 +38,16 @@ import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 
+/**
+ * Generates a .png XY plot of Reddit activity and patch note mentions vs. time for a given keyword.
+ */
 public class GraphCreator_Keyword {
 
 	
 	//-----------------------------------------------------------------
 	//TODO VARIABLE SETTINGS HERE
 	
-	private static final String keyword = "fiora";				// The term to look for in both the Reddit Posts and Patch Notes
+	private static final String keyword = "gragas";				// The term to look for in both the Reddit Posts and Patch Notes
 	private static final String gameName = "League of Legends";	// Used in the database search
 	private static final String gameNameShort = "LOL";			// Reflected in the file name
 	
@@ -58,6 +61,11 @@ public class GraphCreator_Keyword {
 	private static final int granularity = 60*60*24*1;  // Currently equal to # of seconds in one week (604800)
 	
 	private static final String databaseURL = "jdbc:sqlserver://localhost:1433;databaseName=db371project;user=sa;password=sosecure";
+	
+	// If this is true, any time when the Reddit Activity for a week is zero, it will not show on the graph.
+	// And lines are drawn on the graph to connect values
+	private static final boolean connectPoints = false;  
+	
 	
 	//-----------------------------------------------------------------
 	
@@ -108,7 +116,9 @@ public class GraphCreator_Keyword {
             renderer.setBaseShapesVisible(true);
             
             // Remove the lines connecting the series
-            renderer.setSeriesLinesVisible(0, false);
+            if(!connectPoints){
+            	renderer.setSeriesLinesVisible(0, false);
+            }
             // renderer.setSeriesLinesVisible(1, false);
             
             // Make the first series (Reddit) appear blue :P
@@ -199,7 +209,11 @@ public class GraphCreator_Keyword {
 				}
 
 				// Store series data
-				redditActivitySeries.add(outputCurrentWeek , outputRedditScore);
+	            if(!connectPoints){
+	            	redditActivitySeries.add(outputCurrentWeek , outputRedditScore);
+	            }else if( outputRedditScore> 0){
+					redditActivitySeries.add(outputCurrentWeek , outputRedditScore);
+				}
 				
 				// Go to the next time period
 				dateLowerBound += granularity;
