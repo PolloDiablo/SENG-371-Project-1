@@ -160,8 +160,8 @@ Well, did I answer my project question? Partly, but not yet. As I will speak to 
 - (Feb 22) Report on results/findings
 
 <h3>Roles of Team Members</h3>
-- Jeremy Kroeker: all the things 
-- Brayden Arthur: Anything else :p
+- Jeremy Kroeker: all the things :p
+- Brayden Arthur: everything else 
 
 <h3>Resources</h3>
 - How to format Reddit searches: https://github.com/reddit/reddit/blob/master/r2/r2/lib/cloudsearch.py#L172
