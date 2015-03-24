@@ -17,11 +17,8 @@ import java.util.*;
 
 import javax.mail.*;
 import javax.mail.internet.*;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
-import jeremy.seng371.part1.IRedditPostParser;
-import jeremy.seng371.part1.LOLRedditPostParser;
+
 
 
 
@@ -32,18 +29,17 @@ public class DailyCheck {
     public static long startTime = endTime - 86400;
     
     //TODO Like in previous, keywords could be adjusted
-    private static final String keywords = "bug||issue||crash||Bugged";
+    private static String keywords = "bug||issue||crash||Bugged";
     
     //TODO Change this value for the searched subreddit
-    private static final int minimumScoreThreshold = 300;
+    private static int minimumScoreThreshold = 300;
 
-    // Setting a unique HTTP User Agent will make Reddit servers happy
+    // Setting a  unique HTTP User Agent will make Reddit servers happy
     //TODO set your username then add a semicolon :P
-    private static final String userAgent = "Java - University project for Software Evolution (by /u/<USERNAME_HERE>)";
+    private static String userAgent = "Java - University project for Software Evolution (by /u/<USERNAME_HERE>)";
     
-    // This is the username and password of the e-mail the update will be sent to and from
-    public static final String username = "";
-    public static final String password = "";
+    // This is the username and password of the e-mail the update will be sent to
+    public static String username = "371redditparser@gmail.com";
     
     
     
@@ -51,7 +47,6 @@ public class DailyCheck {
     public static void sendEmail(String message){
     	
     	//Connect to the mail server 
-    	//String host = "localhost";
     	String host = "smtp.gmail.com";
     	Properties properties = System.getProperties();
     	Properties props = new Properties();
@@ -62,20 +57,20 @@ public class DailyCheck {
     	Session session = Session.getInstance(properties,
     	new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(username, password);
+                return new PasswordAuthentication("371redditparser@gmail.com","thepasswordispassword");
             }
           });
     	
     	//set up email and send it
     	try{
     		MimeMessage defaultMessage = new MimeMessage(session);
-    		defaultMessage.setFrom(new InternetAddress(username));
+    		defaultMessage.setFrom(new InternetAddress("371redditparser@gmail.com"));
     		defaultMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(username));
     		defaultMessage.setSubject("Important bug post on reddit");
     		defaultMessage.setText(message);
     		Transport t = session.getTransport("smtps");
     	    try {
-    	    	t.connect(host, username, password);
+    	    	t.connect(host, "371redditparser@gmail.com", "thepasswordispassword");
     	    	t.sendMessage(defaultMessage, defaultMessage.getAllRecipients());
     	    	System.out.println("Message sent successfully..");
     	    } finally {
@@ -86,8 +81,8 @@ public class DailyCheck {
     	}
     }
     
-    public static void getRedditPostData(IRedditPostParser parser){
-        System.out.println("Reddit post parsing starting for " + parser.getGameName());
+    public static void getRedditPostData(String subreddit){
+        System.out.println("Reddit post parsing starting for /r/" + subreddit);
         
         // Initialize HTTP client
         CloseableHttpClient httpclient = HttpClients.createDefault();
@@ -97,7 +92,7 @@ public class DailyCheck {
             final String formattedKeywords = URLEncoder.encode(keywords,"UTF-8");
 
             // Construct the URL
-            String queryURL = "http://www.reddit.com/r/"+parser.getSubredditName()+"/search.json?q=(and+timestamp:"+startTime+".."+endTime+"+title:'"+formattedKeywords+"')&sort=top&restrict_sr=on&syntax=cloudsearch&limit=100";    
+            String queryURL = "http://www.reddit.com/r/"+subreddit+"/search.json?q=(and+timestamp:"+startTime+".."+endTime+"+title:'"+formattedKeywords+"')&sort=top&restrict_sr=on&syntax=cloudsearch&limit=100";    
             
             // Get the HTML of the page
             HttpGet httpGet = new HttpGet(queryURL);
@@ -126,10 +121,7 @@ public class DailyCheck {
                     // Checks if post is noteworthy, otherwise disregards it
                     if(popularity > minimumScoreThreshold){
                         String importantPost = "There is an important post at " + url + " about " + title + " - " + body + " with " + numberOfComments + " coments.";
-                    	sendEmail(importantPost);
-                    	JFrame frame = new JFrame("important message");
-                        JOptionPane.showMessageDialog(frame, importantPost);
-                        
+                    	sendEmail(importantPost);                        
                     }
                     else{
                         continue;
@@ -172,8 +164,11 @@ public class DailyCheck {
         }
     }
     
-    public static void main(String args[]){
-        IRedditPostParser parser1 = (IRedditPostParser) new LOLRedditPostParser();
-        getRedditPostData(parser1);
+    public void main(String args[]){
+        getRedditPostData(args[1]);
+        keywords = args[0];
+        minimumScoreThreshold = Integer.parseInt(args[2]);
+        userAgent = args[3];
+        username = args[4];
     }
 }
