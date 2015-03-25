@@ -1,0 +1,14 @@
+1. Download and install SQL Server Express
+http://www.microsoft.com/en-ca/server-cloud/products/sql-server-editions/sql-server-express.aspx
+
+2. Open SQL Server 2014 Management Studio
+
+3. Setup the SQLEXPRESS instance (if you want to be consistent with mine use: user="sa" and password="sosecure"
+
+4. Right-click Databases, and select "New Database..." Create the database (you can use the name "db371project")
+
+5. I haven't tried this myself, but you should be able to use these instructions to restore/import the .bak file I uploaded
+https://msdn.microsoft.com/en-us/library/ms177429%28SQL.90%29.aspx
+
+6. If you have trouble connecting to the database from Java, try the solution here:
+http://stackoverflow.com/questions/18981279/the-tcp-ip-connection-to-the-host-localhost-port-1433-has-failed
