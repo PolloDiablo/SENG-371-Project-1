@@ -38,8 +38,6 @@ TODO
  */
 public class GraphCreator_MultiKeyword{
 
-	//-----------------------------------------------------------------
-	
 	// graph parameters
 	private static final String CHART_X_AXIS_LABEL = "Keyword";
 	private static String CHART_Y_AXIS_LABEL; // Different for PatchNote vs. RedditPost graphs
@@ -57,14 +55,15 @@ public class GraphCreator_MultiKeyword{
 	
 	/**
 	 * This function analyzes the database on either RedditPosts or PatchNotes and creates some graphs:<br>
-	 * - "analyticsNEW/<i>gameName</i>-<i>databaseTableName</i>-multikeyword_barchart.png"<br>
+	 * - "analyticsNEW/<i>filePrefix</i>-<i>databaseTableName</i>-multikeyword_barchart.png"<br>
 	 * - TODO
 	 * 
+	 * Precondition: the <i>databaseTableName</i> table exists in the database
 	 * 
 	 * @param keywords The comma-separated list of words.
 	 * @param filePrefix Start of the file name of the output graphs
 	 * @param databaseURL Connection URL for the JDBC driver
-	 * @param databaseTableName Name of the database table ('PatchNotes' or 'RedditPosts') //TODO make this an enum
+	 * @param databaseTableName Name of the database table ('PatchNotes' or 'RedditPosts') 
 	 * @param gameName Name of the game in the database table (gameName column)
 	 * @param queryStartDate Date for the start of the graph (seconds since epoch)
 	 * @param queryEndDate Date for the start of the graph (seconds since epoch)
@@ -90,7 +89,8 @@ public class GraphCreator_MultiKeyword{
 		}else if(databaseTableName == "RedditPosts"){
 			CHART_Y_AXIS_LABEL = "Log of Reddit Popularity of the Keyword";
 		}else{
-			//TODO
+			System.err.println("ERROR: invalid databaseTableName, please use 'PatchNotes' or 'RedditPosts'.");
+			return;
 		}
 	    
 	    JFreeChart barChart = ChartFactory.createBarChart(
@@ -128,9 +128,9 @@ public class GraphCreator_MultiKeyword{
 			
 			System.out.println("Performing database queries...");
 			for(String keyword : keywordArray){
-
+				
 				Double count = 0.0;
-
+				
 				// Get outputPatchCount (the number of patches released in this time span)	
 		        String keywordLIKE = "%[^A-Za-z]"+keyword+"[^A-Za-z]%"; 
 				sql = "SELECT * FROM "+databaseTableName+" WHERE gameName = ? AND dateTime >= ? and dateTime < ? AND (body LIKE ? OR title LIKE ?)";
@@ -151,12 +151,8 @@ public class GraphCreator_MultiKeyword{
 						if(rs.getInt("popularity")>0){
 							count += Math.log10(rs.getInt("popularity"));
 						}
-					}else{
-						//TODO
-					}
-					
+					}	
 				}
-
 				// Store data
 				keywordValues.add(new AbstractMap.SimpleEntry<>(keyword,count));
 			}

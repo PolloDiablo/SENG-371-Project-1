@@ -41,33 +41,7 @@ import org.jfree.data.time.TimeSeriesCollection;
 /**
  * Generates a .png XY plot of Reddit activity and patch note mentions vs. time for a given keyword.
  */
-public class GraphCreator_Keyword {
-
-	
-	//-----------------------------------------------------------------
-	//TODO VARIABLE SETTINGS HERE
-	
-	private static final String keyword = "gragas";				// The term to look for in both the Reddit Posts and Patch Notes
-	private static final String gameName = "League of Legends";	// Used in the database search
-	private static final String gameNameShort = "LOL";			// Reflected in the file name
-	
-	
-	/* Start of 2013 = 1357027200
-	 * Start of 2014 = 1388563200
-	 * Start of 2015 = 1420099200
-	 */
-	private static final long startDate = 1357027200;
-	private static final long endDate = 1420099200;
-	private static final int granularity = 60*60*24*1;  // Currently equal to # of seconds in one week (604800)
-	
-	private static final String databaseURL = "jdbc:sqlserver://localhost:1433;databaseName=db371project;user=sa;password=sosecure";
-	
-	// If this is true, any time when the Reddit Activity for a week is zero, it will not show on the graph.
-	// And lines are drawn on the graph to connect values
-	private static final boolean connectPoints = false;  
-	
-	
-	//-----------------------------------------------------------------
+public class GraphCreator_SingleKeyword {
 	
 	// Constant graph parameters
 	private static final String CHART_X_AXIS_LABEL = "Time (weeks)";
@@ -82,7 +56,29 @@ public class GraphCreator_Keyword {
 	private static final int CHART_WIDTH = 900;
 	private static final int CHART_HEIGHT = 400;
 	
-	public static void main( String[] args ){
+	// If this is true, any time when the Reddit Activity for a week is zero, it will not show on the graph.
+	// And lines are drawn on the graph to connect values
+	
+	/**
+	 * This function analyzes the database on either RedditPosts or PatchNotes and creates some graphs:<br>
+	 * - "analyticsNEW/<i>filePrefix</i>-<i>keyword</i>-singlekeyword_XYplot.png"<br>
+	 * - TODO ? more graphs
+	 * 
+	 * Precondition: the 'RedditPosts' table exists in the database
+	 * 
+	 * @param keyword The keyword that will be queried
+	 * @param filePrefix Start of the file name of the output graphs
+	 * @param databaseURL Connection URL for the JDBC driver
+	 * @param includePatchNoteData Whether or not to use data from the 'PatchNotes' table
+	 * @param gameName Name of the game in the database table (gameName column)
+	 * @param queryStartDate Date for the start of the graph (seconds since epoch)
+	 * @param queryEndDate Date for the start of the graph (seconds since epoch)
+	 * @param granularity Size of time increment between points on the graph
+	 * @param connectPoints If true, lines are drawn to connect data points on the graph
+
+	 */
+	public static void createCharts(String keyword, String filePrefix, String databaseURL, boolean includePatchNoteData, 
+			String gameName, long queryStartDate , long queryEndDate, int granularity, boolean connectPoints ){
 	
 		//-----------------------------------------------------------------
 		// Initialize the chart
@@ -119,7 +115,6 @@ public class GraphCreator_Keyword {
             if(!connectPoints){
             	renderer.setSeriesLinesVisible(0, false);
             }
-            // renderer.setSeriesLinesVisible(1, false);
             
             // Make the first series (Reddit) appear blue :P
             renderer.setSeriesPaint(0, CHART_REDDIT_SERIES_COLOUR);
@@ -144,11 +139,11 @@ public class GraphCreator_Keyword {
 			conn = DriverManager.getConnection(databaseURL);
 			
 			// Iterate through each week from start date to end date
-			long dateLowerBound = startDate;
-			long dateUpperBound = startDate + granularity;
+			long dateLowerBound = queryStartDate;
+			long dateUpperBound = queryStartDate + granularity;
 			
 			System.out.println("Performing database queries...");
-			while(dateUpperBound <= endDate){
+			while(dateUpperBound <= queryEndDate){
 				Date sqlDateLowerBound = new Date(dateLowerBound*1000);
 				Date sqlDateUpperBound = new Date(dateUpperBound*1000);
 				
@@ -193,27 +188,29 @@ public class GraphCreator_Keyword {
 				}
 
 				
-				// Get outputPatchCount (the number of patches released in this time span)		
-				sql = "SELECT COUNT(*) AS total FROM PatchNotes WHERE gameName = ? AND dateTime >= ? and dateTime < ? AND (body LIKE ? OR title LIKE ?)";
-				stmt = conn.prepareStatement(sql);
-				stmt.setString(1, gameName);
-				stmt.setDate(2, sqlDateLowerBound);
-				stmt.setDate(3, sqlDateUpperBound);
-				stmt.setString(4, keywordLIKE);
-				stmt.setString(5, keywordLIKE);
-				rs = stmt.executeQuery();
-				if(rs.next() && rs.getInt("total") > 0){
-					// Draw a vertical line if there is a patch
-					Marker newMarker = new ValueMarker(cal.getTimeInMillis(),CHART_PATCH_SERIES_COLOUR, new BasicStroke(2)); 
-					plot.addDomainMarker(newMarker);
+				if(includePatchNoteData){
+					// Get outputPatchCount (the number of patches released in this time span)		
+					sql = "SELECT COUNT(*) AS total FROM PatchNotes WHERE gameName = ? AND dateTime >= ? and dateTime < ? AND (body LIKE ? OR title LIKE ?)";
+					stmt = conn.prepareStatement(sql);
+					stmt.setString(1, gameName);
+					stmt.setDate(2, sqlDateLowerBound);
+					stmt.setDate(3, sqlDateUpperBound);
+					stmt.setString(4, keywordLIKE);
+					stmt.setString(5, keywordLIKE);
+					rs = stmt.executeQuery();
+					if(rs.next() && rs.getInt("total") > 0){
+						// Draw a vertical line if there is a patch
+						Marker newMarker = new ValueMarker(cal.getTimeInMillis(),CHART_PATCH_SERIES_COLOUR, new BasicStroke(2)); 
+						plot.addDomainMarker(newMarker);
+					}
 				}
 
 				// Store series data
-	            if(!connectPoints){
+	           // if(!connectPoints){
 	            	redditActivitySeries.add(outputCurrentWeek , outputRedditScore);
-	            }else if( outputRedditScore> 0){
-					redditActivitySeries.add(outputCurrentWeek , outputRedditScore);
-				}
+	            //}else if( outputRedditScore>=1){
+				//	redditActivitySeries.add(outputCurrentWeek , outputRedditScore);
+				//}
 				
 				// Go to the next time period
 				dateLowerBound += granularity;
@@ -230,8 +227,8 @@ public class GraphCreator_Keyword {
 	
 		//-----------------------------------------------------------------
 		// Output the chart to a PNG file
-		System.out.println("Outputting the Chart...");
-	    File outputFile = new File("analyticsNEW/" + gameNameShort +"-"+keyword + ".png" );                        
+		System.out.println("Outputting the Chart...");      
+	    File outputFile = new File("analyticsNEW/" + filePrefix +"-"+keyword+"-singlekeyword_XYplot.png" );   
 	    try {
 	    	ChartUtilities.saveChartAsPNG( outputFile, timeSeriesChart, CHART_WIDTH, CHART_HEIGHT);
 	    } catch (IOException e) {

@@ -2,6 +2,10 @@ package awesome.seng371.part2;
 
 public class GraphTester {
 
+	private static final String keyword = "sion";
+	private static final boolean includePatchNoteData = false;
+	private static final int granularity = 60*60*24*7;  // Currently equal to # of seconds in one week (604800)
+	private static final boolean connectPoints = true;
 	
 	//All the league champs as of March 2015
 	/*private static final String keywords = "Aatrox,Ahri,Akali,Alistar,Amumu,Anivia,Annie,Ashe,Azir,Bard,Blitzcrank," +
@@ -39,7 +43,9 @@ public class GraphTester {
 	
 	
 	public static void main( String[] args ){	
-		GraphCreator_MultiKeyword.createCharts(keywords, filePrefix, databaseURL, databaseTableName, gameName, queryStartDate , queryEndDate);
+		GraphCreator_SingleKeyword.createCharts(keyword, filePrefix, databaseURL, includePatchNoteData, gameName, 
+				queryStartDate , queryEndDate, granularity, connectPoints);
+		//GraphCreator_MultiKeyword.createCharts(keywords, filePrefix, databaseURL, databaseTableName, gameName, queryStartDate , queryEndDate);
 	}
 	
 }
