@@ -43,9 +43,9 @@ public class GraphTester {
 	
 	
 	public static void main( String[] args ){	
-		GraphCreator_SingleKeyword.createCharts(keyword, filePrefix, databaseURL, includePatchNoteData, gameName, 
+		GraphCreator_SingleKeyword.createCharts(keyword, databaseURL, includePatchNoteData, gameName, 
 				queryStartDate , queryEndDate, granularity, connectPoints);
-		//GraphCreator_MultiKeyword.createCharts(keywords, filePrefix, databaseURL, databaseTableName, gameName, queryStartDate , queryEndDate);
+		//GraphCreator_MultiKeyword.createCharts(keywords, databaseURL, databaseTableName, gameName, queryStartDate , queryEndDate);
 	}
 	
 }

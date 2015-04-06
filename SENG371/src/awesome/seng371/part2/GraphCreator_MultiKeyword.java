@@ -61,21 +61,20 @@ public class GraphCreator_MultiKeyword{
 	 * Precondition: the <i>databaseTableName</i> table exists in the database
 	 * 
 	 * @param keywords The comma-separated list of words.
-	 * @param filePrefix Start of the file name of the output graphs
 	 * @param databaseURL Connection URL for the JDBC driver
-	 * @param databaseTableName Name of the database table ('PatchNotes' or 'RedditPosts') 
+	 * @param databaseTableName Name of the database table ('PatchNotes' or 'RedditPosts') ALWAYS RedditPosts for our GUI
 	 * @param gameName Name of the game in the database table (gameName column)
 	 * @param queryStartDate Date for the start of the graph (seconds since epoch)
 	 * @param queryEndDate Date for the start of the graph (seconds since epoch)
 	 */
-	public static void createCharts(String keywords, String filePrefix, String databaseURL, String databaseTableName, 
+	public static void createCharts(String keywords, String databaseURL, String databaseTableName, 
 			String gameName, long queryStartDate , long queryEndDate ){
 	
 		//-----------------------------------------------------------------
 		// Initialize the chart
 		System.out.println("Creating the chart...");
 
-		// Get the list of keywords into a usable form:
+		// Get the list of keywords into a usable form: (splits by comma and removes leading/trailing whitespace)
 		List<String> keywordArray = Arrays.asList(keywords.split("\\s*,\\s*"));
 		List<Map.Entry<String,Double>> keywordValues= new java.util.ArrayList<>();
 		
@@ -146,13 +145,15 @@ public class GraphCreator_MultiKeyword{
 						++count;
 					}else if(databaseTableName == "RedditPosts"){
 						if(rs.getInt("numberOfComments")>0){
-							count += Math.log10(rs.getInt("numberOfComments"));
+							count += rs.getInt("numberOfComments");
 						}
 						if(rs.getInt("popularity")>0){
-							count += Math.log10(rs.getInt("popularity"));
+							count += rs.getInt("popularity");
 						}
 					}	
 				}
+				count =  Math.max(0, Math.log10(count));
+
 				// Store data
 				keywordValues.add(new AbstractMap.SimpleEntry<>(keyword,count));
 			}
@@ -178,9 +179,9 @@ public class GraphCreator_MultiKeyword{
 		//-----------------------------------------------------------------
 		// Output the chart to a PNG file
 		System.out.println("Outputting the Chart...");
-	    File outputFile = new File("analyticsNEW/" + filePrefix +"-"+databaseTableName+"-multikeyword_barchart.png" );                        
+	    File outputFile = new File("analyticsNEW/" + databaseTableName+"-multikeyword_barchart.png" );                        
 	    try {
-	    	int chartHeight = 50 + 15*keywordArray.size();
+	    	int chartHeight = 100 + 12*keywordArray.size();
 	    	ChartUtilities.saveChartAsPNG( outputFile, barChart, CHART_WIDTH, chartHeight);
 	    } catch (IOException e) {
 	    	e.printStackTrace();

@@ -5,6 +5,8 @@ import javax.swing.*;
 import java.awt.GridLayout;
 import java.awt.Panel;
 import java.awt.Button;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -33,7 +35,10 @@ public class myGUI {
 	private static JTextField textField_9;
 	private static JTextField textField_10;
 	private static JTextField textField_11;
-	private static JCheckBox chckbxYes;
+	//private static JCheckBox chckbxYes;
+	
+	/**If true, use the single-keyword search, else use the multi-keyword search. */
+	private static boolean singleKeyword = true;
 	
 	public static void main(String[] args){
 		JFrame myGUI = new JFrame();
@@ -45,6 +50,8 @@ public class myGUI {
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		myGUI.getContentPane().add(tabbedPane);
 		
+		// -----------------------------------------------------
+		// PANEL 0
 		Panel panel = new Panel();
 		tabbedPane.addTab("Monitor Subreddit", null, panel, null);
 		panel.setLayout(null);
@@ -106,29 +113,51 @@ public class myGUI {
 		lblAddYourGmail.setBounds(10, 135, 325, 14);
 		panel.add(lblAddYourGmail);
 		
+		// -----------------------------------------------------
+		// PANEL 1
 		panel_1 = new JPanel();
 		tabbedPane.addTab("Graph Data", null, panel_1, null);
 		panel_1.setLayout(null);
 		
+		// Radio buttons allow user to choose between single and multi keywords
 		lblNewLabel_2 = new JLabel("<html><center>If you haven't yet set up your database, please read the database setup file at ~\\SENG-371-Project-1\\docs\\database-setup.txt</html>");
 		lblNewLabel_2.setBounds(10, 11, 579, 34);
 		panel_1.add(lblNewLabel_2);
-		
-		JLabel lblNewLabel_3 = new JLabel("Keyword(s) to look for, seperate with spaces");
-		lblNewLabel_3.setBounds(10, 56, 274, 14);
-		panel_1.add(lblNewLabel_3);
-		
-		JLabel lblNewLabel_4 = new JLabel("Graph name");
-		lblNewLabel_4.setBounds(10, 81, 246, 14);
-		panel_1.add(lblNewLabel_4);
+		final JRadioButton radioSingleKeyword = new JRadioButton("Single keyword", true);
+		radioSingleKeyword.setBounds(10, 56, 274, 14);
+		radioSingleKeyword.addItemListener(new ItemListener() {
+	    	public void itemStateChanged(ItemEvent e) {
+	    		textField_6.setEditable(true);
+	    		textField_7.setEditable(false);
+	    		singleKeyword = true;
+	    		chckbxYes_1.setEnabled(true);
+	    		textField_11.setEnabled(true);
+	    	}           
+	    });
+		panel_1.add(radioSingleKeyword);
+		JRadioButton radioMultiKeyword = new JRadioButton("Multiple keywords (comma separated)");
+		radioMultiKeyword.setBounds(10, 81, 274, 14);
+		radioMultiKeyword.addItemListener(new ItemListener() {
+	    	public void itemStateChanged(ItemEvent e) {
+	    		textField_6.setEditable(false);
+	    		textField_7.setEditable(true);
+	    		singleKeyword = false;
+	    		chckbxYes_1.setEnabled(false);
+	    		textField_11.setEnabled(false);
+	    	}           
+	    });
+		panel_1.add(radioMultiKeyword);
+	    ButtonGroup group = new ButtonGroup();
+	    group.add(radioSingleKeyword);
+	    group.add(radioMultiKeyword);
 		
 		JLabel lblNewLabel_5 = new JLabel("Database url");
-		lblNewLabel_5.setBounds(10, 106, 343, 14);
+		lblNewLabel_5.setBounds(10, 131/*106*/, 343, 14);
 		panel_1.add(lblNewLabel_5);
 		
-		JLabel lblNewLabel_6 = new JLabel("Do you want to include data from the patch notes table?");
-		lblNewLabel_6.setBounds(10, 131, 343, 14);
-		panel_1.add(lblNewLabel_6);
+		//JLabel lblNewLabel_6 = new JLabel("Do you want to include data from the patch notes table?");
+		//lblNewLabel_6.setBounds(10, 131, 343, 14);
+		//panel_1.add(lblNewLabel_6);
 		
 		JLabel lblNewLabel_7 = new JLabel("Name of game in database table");
 		lblNewLabel_7.setBounds(10, 156, 274, 14);
@@ -142,7 +171,7 @@ public class myGUI {
 		lblNewLabel_9.setBounds(10, 206, 280, 14);
 		panel_1.add(lblNewLabel_9);
 		
-		JLabel lblNewLabel_10 = new JLabel("Time increment between points (epoch time)");
+		JLabel lblNewLabel_10 = new JLabel("Time increment between points (seconds)");
 		lblNewLabel_10.setBounds(10, 231, 274, 14);
 		panel_1.add(lblNewLabel_10);
 		
@@ -150,9 +179,9 @@ public class myGUI {
 		lblNewLabel_11.setBounds(10, 256, 274, 14);
 		panel_1.add(lblNewLabel_11);
 
-		chckbxYes = new JCheckBox("Yes");
-		chckbxYes.setBounds(369, 127, 97, 23);
-		panel_1.add(chckbxYes);
+		//chckbxYes = new JCheckBox("Yes");
+		//chckbxYes.setBounds(369, 127, 97, 23);
+		//panel_1.add(chckbxYes);
 		
 		chckbxYes_1 = new JCheckBox("Yes");
 		chckbxYes_1.setBounds(369, 252, 97, 23);
@@ -172,9 +201,10 @@ public class myGUI {
 		textField_7.setBounds(369, 78, 230, 20);
 		panel_1.add(textField_7);
 		textField_7.setColumns(10);
+		textField_7.setEditable(false); // Initially disabled (see radio buttons)
 		
 		textField_8 = new JTextField();
-		textField_8.setBounds(369, 103, 230, 20);
+		textField_8.setBounds(369, 128, 230, 20);
 		panel_1.add(textField_8);
 		textField_8.setColumns(10);
 		
@@ -182,43 +212,56 @@ public class myGUI {
 		textField_9.setBounds(369, 178, 230, 20);
 		panel_1.add(textField_9);
 		textField_9.setColumns(10);
+		textField_9.setText("1388563200");//Default value
 		
 		textField_10 = new JTextField();
 		textField_10.setBounds(369, 203, 230, 20);
 		panel_1.add(textField_10);
 		textField_10.setColumns(10);
+		textField_10.setText("1420099200");//Default value
 		
 		textField_11 = new JTextField();
 		textField_11.setBounds(369, 228, 230, 20);
 		panel_1.add(textField_11);
 		textField_11.setColumns(10);
+		textField_11.setText("604800");//Default value
 		
 		JButton btnCreateGraphs = new JButton("Create Graphs");
 		btnCreateGraphs.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				String test1 = textField_6.getText();
-				String test2 = textField_7.getText();
-				String test3 = textField_8.getText();
-				boolean test4 = false;
-				if(chckbxYes.isSelected()){
-					test4 = true;
-				}
-				String test5 = textField_6.getText();
-				long test6 = Long.parseLong(textField_9.getText());
-				long test7 = Long.parseLong(textField_10.getText());
-				int test8 = Integer.parseInt(textField_11.getText());
-				boolean test9 = false;
+				String keyword = textField_6.getText();
+				String keywords = textField_7.getText();
+				String databaseURL = textField_8.getText();
+				//if(chckbxYes.isSelected()){
+				//	includePatchNoteData = true;
+				//}
+				String gameName = textField_5.getText();
+				long queryStartDate = Long.parseLong(textField_9.getText());
+				long queryEndDate = Long.parseLong(textField_10.getText());
+				int granularity = Integer.parseInt(textField_11.getText());
+				boolean connectPoints = false;
 				if(chckbxYes_1.isSelected()){
-					test9 = true;
+					connectPoints = true;
 				}
-				GraphCreator_SingleKeyword.createCharts(test1,test2,test3,test4,test5,test6,test7,test8,test9);
+				
+				if(singleKeyword){
+					boolean includePatchNoteData = true;
+					GraphCreator_SingleKeyword.createCharts(keyword,databaseURL,includePatchNoteData,
+							gameName,queryStartDate,queryEndDate,granularity,connectPoints);
+				}else{
+					String databaseTableName = "RedditPosts";
+					GraphCreator_MultiKeyword.createCharts(keywords, databaseURL, 
+							databaseTableName, gameName, queryStartDate , queryEndDate);
+				}
+
 			}
 		});
 		btnCreateGraphs.setBounds(259, 305, 127, 23);
 		panel_1.add(btnCreateGraphs);
 		
-		
+		// -----------------------------------------------------
+		// PANEL 2
 		panel_2 = new JPanel();
 		tabbedPane.addTab("Display Graphs", null, panel_2, null);
 		myGUI.setVisible(true);

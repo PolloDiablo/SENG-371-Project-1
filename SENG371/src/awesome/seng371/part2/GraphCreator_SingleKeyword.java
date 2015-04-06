@@ -61,15 +61,14 @@ public class GraphCreator_SingleKeyword {
 	
 	/**
 	 * This function analyzes the database on either RedditPosts or PatchNotes and creates some graphs:<br>
-	 * - "analyticsNEW/<i>filePrefix</i>-<i>keyword</i>-singlekeyword_XYplot.png"<br>
+	 * - "analyticsNEW/<i>keyword</i>-singlekeyword_XYplot.png"<br>
 	 * - TODO ? more graphs
 	 * 
 	 * Precondition: the 'RedditPosts' table exists in the database
 	 * 
 	 * @param keyword The keyword that will be queried
-	 * @param filePrefix Start of the file name of the output graphs
 	 * @param databaseURL Connection URL for the JDBC driver
-	 * @param includePatchNoteData Whether or not to use data from the 'PatchNotes' table
+	 * @param includePatchNoteData Whether or not to use data from the 'PatchNotes' table. ALWAYS false for our GUI
 	 * @param gameName Name of the game in the database table (gameName column)
 	 * @param queryStartDate Date for the start of the graph (seconds since epoch)
 	 * @param queryEndDate Date for the start of the graph (seconds since epoch)
@@ -77,9 +76,19 @@ public class GraphCreator_SingleKeyword {
 	 * @param connectPoints If true, lines are drawn to connect data points on the graph
 
 	 */
-	public static void createCharts(String keyword, String filePrefix, String databaseURL, boolean includePatchNoteData, 
+	public static void createCharts(String keyword, String databaseURL, boolean includePatchNoteData, 
 			String gameName, long queryStartDate , long queryEndDate, int granularity, boolean connectPoints ){
 	
+		System.out.println("DEBUG");
+		System.out.println("keyword = "+ keyword);
+		System.out.println("databaseURL = "+ databaseURL);
+		System.out.println("includePatchNoteData = "+ includePatchNoteData);
+		System.out.println("gameName = "+ gameName);
+		System.out.println("queryStartDate = "+ queryStartDate);
+		System.out.println("queryEndDate = "+ queryEndDate);
+		System.out.println("granularity = "+ granularity);
+		System.out.println("connectPoints = "+ connectPoints);
+		
 		//-----------------------------------------------------------------
 		// Initialize the chart
 		System.out.println("Creating the chart...");
@@ -180,13 +189,13 @@ public class GraphCreator_SingleKeyword {
 				rs = stmt.executeQuery();	
 				while(rs.next()){
 					if(rs.getInt("numberOfComments")>0){
-						outputRedditScore += Math.log10(rs.getInt("numberOfComments"));
+						outputRedditScore += rs.getInt("numberOfComments");
 					}
 					if(rs.getInt("popularity")>0){
-						outputRedditScore += Math.log10(rs.getInt("popularity"));
+						outputRedditScore += rs.getInt("popularity");
 					}
 				}
-
+				outputRedditScore =  Math.max(0, Math.log10(outputRedditScore));
 				
 				if(includePatchNoteData){
 					// Get outputPatchCount (the number of patches released in this time span)		
@@ -228,7 +237,7 @@ public class GraphCreator_SingleKeyword {
 		//-----------------------------------------------------------------
 		// Output the chart to a PNG file
 		System.out.println("Outputting the Chart...");      
-	    File outputFile = new File("analyticsNEW/" + filePrefix +"-"+keyword+"-singlekeyword_XYplot.png" );   
+	    File outputFile = new File("analyticsNEW/" +keyword+"-singlekeyword_XYplot.png" );   
 	    try {
 	    	ChartUtilities.saveChartAsPNG( outputFile, timeSeriesChart, CHART_WIDTH, CHART_HEIGHT);
 	    } catch (IOException e) {
