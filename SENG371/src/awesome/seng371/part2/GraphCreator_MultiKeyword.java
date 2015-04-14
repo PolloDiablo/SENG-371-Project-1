@@ -166,9 +166,9 @@ public class GraphCreator_MultiKeyword{
 		}
 
 		// Sort (or don't) the dataset
-		if(sortKeywordsByValue){
-			keywordValues.sort(new ValueComparator<String,Double>()); 
-		}
+		//if(sortKeywordsByValue){
+		//	keywordValues.sort(new ValueComparator<String,Double>()); 
+		//}
 		
 		// Add the keywords and values to the chart's dataset
 		for(Map.Entry<String,Double> entry : keywordValues){

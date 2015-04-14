@@ -2,6 +2,7 @@ package awesome.seng371.part2;
 
 import javax.swing.*;
 
+import java.awt.Desktop;
 import java.awt.GridLayout;
 import java.awt.Panel;
 import java.awt.Button;
@@ -11,6 +12,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import awesome.seng371.part2.DailyCheck;
+
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
 
 public class myGUI {
 	private static JTextField textField;
@@ -39,6 +44,7 @@ public class myGUI {
 	
 	/**If true, use the single-keyword search, else use the multi-keyword search. */
 	private static boolean singleKeyword = true;
+	private static JButton btnTakeMeTo;
 	
 	public static void main(String[] args){
 		JFrame myGUI = new JFrame();
@@ -76,7 +82,7 @@ public class myGUI {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				DailyCheck geeg = new DailyCheck();
-				String[] words = {textField_1.getText(),textField_2.getText(),textField_3.getText(),textField_4.getText()};  
+				String[] words = {textField.getText(),textField_1.getText(),textField_2.getText(),textField_3.getText(),textField_4.getText()};  
 				geeg.main(words);
 			}
 		});
@@ -264,6 +270,24 @@ public class myGUI {
 		// PANEL 2
 		panel_2 = new JPanel();
 		tabbedPane.addTab("Display Graphs", null, panel_2, null);
+		panel_2.setLayout(null);
+		
+		btnTakeMeTo = new JButton("Take me to my graphs");
+		btnTakeMeTo.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				Desktop desktop = Desktop.getDesktop();
+				File directory1 = new File("").getAbsoluteFile();
+				File directory2 = new File(directory1,"analyticsNEW");
+				try{
+					desktop.open(directory2);
+				} catch (IllegalArgumentException | IOException iae) {
+					System.out.println("File Not Found");
+				} 
+			}
+		});
+		btnTakeMeTo.setBounds(186, 68, 347, 169);
+		panel_2.add(btnTakeMeTo);
 		myGUI.setVisible(true);
 	}
 }

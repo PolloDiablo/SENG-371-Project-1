@@ -25,6 +25,7 @@ import javax.mail.internet.*;
 public class DailyCheck {
     //Uses current time and previous 24 hours for checking post history
     static java.util.Date date = new java.util.Date();
+    
     public final static long endTime = date.getTime() / 1000;
     public static long startTime = endTime - 86400;
     
@@ -165,10 +166,10 @@ public class DailyCheck {
     }
     
     public void main(String args[]){
-        getRedditPostData(args[1]);
         keywords = args[0];
-        minimumScoreThreshold = Integer.parseInt(args[2]);
-        userAgent = args[3];
-        username = args[4];
+        minimumScoreThreshold = Integer.parseInt(args[3]);
+        userAgent = args[4];
+        username = args[1];
+        getRedditPostData(args[2]);
     }
 }
