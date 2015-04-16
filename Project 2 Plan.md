@@ -50,15 +50,18 @@ The UI has 4 Panels, this is a brief overview of each:
 A number of sample charts have been uploaded which demonstrate what can be done with through the UI:
 
 Here is the resulting graph for the single keyword "Ahri" during 2014:
-![Single-Keyword](https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/SENG371/analytics/ahri-singlekeyword_XYplot)
+
+![Single-Keyword](https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/SENG371/analyticsNEW/ahri-singlekeyword_XYplot.png)
 
 Here is the resulting graph comparing all League of Legends characters created prior to 2014, during 2014:
-![Multi-Keyword](https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/SENG371/analytics/RedditPosts-multikeyword_barchart)
+
+![Multi-Keyword](https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/SENG371/analyticsNEW/RedditPosts-multikeyword_barchart.png)
 
 
 As mentioned earlier, we also wanted to perform additional analysis on the existing data from Project 1. In the chart below, we normalize the values of Reddit Popularity and Patch Notes, and find the difference for each keyword. Essentially, these tells you which League of Legends characters are getting proportionally more or less attention when compared to the forum activity.
-Since this chart requires Patch Note data, we did not make it accessible through the UI. However, the code to create this type of chart resides in "src/GraphCreator_MultiKeyword.java"
-![Normalized Comparison](https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/SENG371/analytics/RedditPosts-multikeyword_barchart)
+
+Since this chart requires Patch Note data, we did not make it accessible through the UI. However, the code to create this type of chart resides in "src/GraphCreator_MultiKeyword.java".
+![Normalized Comparison](https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/SENG371/analyticsNEW/multikeyword_normalized_difference.png)
 
 
 <h2>Analysis and Conclusion</h2>
