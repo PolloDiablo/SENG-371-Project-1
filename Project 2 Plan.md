@@ -43,11 +43,12 @@ The UI has 4 Panels, this is a brief overview of each:
 2. <b>Graph Data</b> - Assuming you have setup AND populated the database (see #4), you can use this feature to create graphs. There are two primary graph types that you can create:
   - Track the variations in popularity of a single keyword over time 
   - Compare the occurences of multiple keywords over the entire time span
+As a time-saving feature, after you successfully create a graph, your current query parameters are stored to a data file. The next time you launch the application, each of the query fields will automatically be populated for you. This means, for example, that you would not need to enter the URL of your database each time you use the tool. Some of this data is also populated into panel 4.
 3. <b>Display Graphs</b> - This page provides a link to the folder where the graphs have been generated.
 4. <b>Data Scraper</b> - Assuming you have created the database as described in /docs/data.txt , this feature allows you to populate the database with data from Reddit. Given that it has to send a large number of queries to the Reddit API, acquiring this data may take a long time.
 
 <h2>Results of Experiment</h2>
-A number of sample charts have been uploaded which demonstrate what can be done with through the UI:
+A number of sample charts have been uploaded which demonstrate what can be done through the UI:
 
 Here is the resulting graph for the single keyword "Ahri" during 2014:
 
@@ -65,13 +66,17 @@ Since this chart requires Patch Note data, we did not make it accessible through
 
 
 <h2>Analysis and Conclusion</h2>
-TODO
+Overall, the tool seemed to be a success. The project was not over-scoped, so we had time to implement all intended functionality. A video demo of the tool is available, coming soon...
 
 <h3>Threats to Validity</h3>
-TODO
+This project focused largely on creating the tool, rather than analyzing data. The validity of any graphs created by this tool will vary largely based on what data the user is studying and how they setup each graph. However, in all cases, users will be looking at Reddit data, so they must be aware of the limitations of natural language parsing. A keyword search will not pick-up on things such as slang, typos, abbreviations, or sarcasm. Additionally, any online forum is subject to trolling and any number of forum "games" which could affect the data being collected.
 
 <h3>Future Work</h3>
-TODO
+There is still some manual setup required to get the tool running (specifically the database creation). It would be ideal to somehow automate this process. Perhaps by storing the data to a file, rather than into a proper database. This would reduce performance but would be much simpler and would work across more platforms (SQLEXPRESS not required).
+
+The UI of the tool could also be improved if the tool were to be developed further. The current version is essentially a prototype with barebones functionality. UI elements such as date-pickers would make it much easier to fill-out the graph creation forms. Requiring epoch time is not user-friendly.
+
+There is some overlap in functionality between the live subreddit monitor and the data scraper. Both of them query the Reddit API, but the live monitor does not store any data. These two features code be merged so that as the subreddit is monitored, the database is simultaneously updated. However, this merge could become complex since Reddit posts vary in score over time and the live updater just looks at posts in the last 24 hours. So it would also periodically need to check backwards in time to update the scores of older posts.
 
 <h2>Project Management Information</h2>
 
@@ -184,5 +189,7 @@ TODO
 - Brayden Arthur: UI/tool Creator
 
 <h3>Resources</h3>
-- TODO
+- JFreeChart for automated graph generation from Java: http://www.jfree.org/jfreechart/
+- JFreeChart Tutorials: http://www.tutorialspoint.com/jfreechart/jfreechart_file_interface.htm
+- Java Swing & AWT for the UI: http://docs.oracle.com/javase/7/docs/api/java/awt/package-summary.html
 - Also, See Project 1 README for additional sources
