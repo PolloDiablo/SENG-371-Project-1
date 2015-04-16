@@ -15,9 +15,19 @@ import awesome.seng371.part2.DailyCheck;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class myGUI {
+	
 	private static JTextField textField;
 	private static JTextField textField_1;
 	private static JTextField textField_2;
@@ -32,6 +42,7 @@ public class myGUI {
 	private static JPanel panel_2;
 	private static JLabel lblNewLabel_2;
 	private static JLabel lblNewLabel_11;
+	private static JLabel lblNewLabel_3;
 	private static JCheckBox chckbxYes_1;
 	private static JTextField textField_5;
 	private static JTextField textField_6;
@@ -47,7 +58,7 @@ public class myGUI {
 	private static JButton btnTakeMeTo;
 	
 	public static void main(String[] args){
-		JFrame myGUI = new JFrame();
+		final JFrame myGUI = new JFrame();
 		myGUI.setTitle("Reddit Parser");
 		myGUI.setSize(720, 420);
 		myGUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -120,7 +131,7 @@ public class myGUI {
 		panel.add(lblAddYourGmail);
 		
 		// -----------------------------------------------------
-		// PANEL 1
+		// PANEL 1	
 		panel_1 = new JPanel();
 		tabbedPane.addTab("Graph Data", null, panel_1, null);
 		panel_1.setLayout(null);
@@ -156,6 +167,12 @@ public class myGUI {
 	    ButtonGroup group = new ButtonGroup();
 	    group.add(radioSingleKeyword);
 	    group.add(radioMultiKeyword);
+	    
+		lblNewLabel_3 = new JLabel("Loading...");
+		//lblNewLabel_3.setBounds(259, 305, 127, 23);
+		lblNewLabel_3.setBounds(410, 305, 160, 23);
+		panel_1.add(lblNewLabel_3);
+		lblNewLabel_3.setVisible(false);
 		
 		JLabel lblNewLabel_5 = new JLabel("Database url");
 		lblNewLabel_5.setBounds(10, 131/*106*/, 343, 14);
@@ -218,53 +235,137 @@ public class myGUI {
 		textField_9.setBounds(369, 178, 230, 20);
 		panel_1.add(textField_9);
 		textField_9.setColumns(10);
-		textField_9.setText("1388563200");//Default value
+		//textField_9.setText("1388563200");//Default value
 		
 		textField_10 = new JTextField();
 		textField_10.setBounds(369, 203, 230, 20);
 		panel_1.add(textField_10);
 		textField_10.setColumns(10);
-		textField_10.setText("1420099200");//Default value
+		//textField_10.setText("1420099200");//Default value
 		
 		textField_11 = new JTextField();
 		textField_11.setBounds(369, 228, 230, 20);
 		panel_1.add(textField_11);
 		textField_11.setColumns(10);
-		textField_11.setText("604800");//Default value
+		//textField_11.setText("604800");//Default value
 		
 		JButton btnCreateGraphs = new JButton("Create Graphs");
 		btnCreateGraphs.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				String keyword = textField_6.getText();
-				String keywords = textField_7.getText();
-				String databaseURL = textField_8.getText();
+				final String keyword = textField_6.getText();
+				final String keywords = textField_7.getText();
+				final String databaseURL = textField_8.getText();
 				//if(chckbxYes.isSelected()){
 				//	includePatchNoteData = true;
 				//}
-				String gameName = textField_5.getText();
-				long queryStartDate = Long.parseLong(textField_9.getText());
-				long queryEndDate = Long.parseLong(textField_10.getText());
-				int granularity = Integer.parseInt(textField_11.getText());
-				boolean connectPoints = false;
-				if(chckbxYes_1.isSelected()){
-					connectPoints = true;
+				final String gameName = textField_5.getText();
+				final long queryStartDate = Long.parseLong(textField_9.getText());
+				final long queryEndDate = Long.parseLong(textField_10.getText());
+				final int granularity = Integer.parseInt(textField_11.getText());
+				final boolean connectPoints = chckbxYes_1.isSelected();
+				
+				// Before we try creating graphs, test the database URL
+				Connection conn = null;
+				try{
+					conn = DriverManager.getConnection(databaseURL);
+				} catch (Exception e1) {
+					lblNewLabel_3.setText("ERROR: Invalid Database url");
+					lblNewLabel_3.setVisible(true);
+					return;
+				} finally {
+					try { if (conn != null) conn.close(); } catch (Exception e2) {};
 				}
 				
-				if(singleKeyword){
-					boolean includePatchNoteData = true;
-					GraphCreator_SingleKeyword.createCharts(keyword,databaseURL,includePatchNoteData,
-							gameName,queryStartDate,queryEndDate,granularity,connectPoints);
-				}else{
-					String databaseTableName = "RedditPosts";
-					GraphCreator_MultiKeyword.createCharts(keywords, databaseURL, 
-							databaseTableName, gameName, queryStartDate , queryEndDate);
+				//TODO
+				// Also, ensure that the user didn't leave the keyword/keywords field blank
+				if( (singleKeyword && keyword.equals(""))|| (!singleKeyword && keywords.equals(""))){
+					lblNewLabel_3.setText("ERROR: keyword field blank");
+					lblNewLabel_3.setVisible(true);
+					return;
 				}
+				System.out.println("????" + textField_6.getText());
+				
+				// Show a loading message
+				lblNewLabel_3.setText("Loading...");
+				lblNewLabel_3.setVisible(true);
 
+				// Worker allows us to create the graphs asynchronously
+			    SwingWorker<String, Object> worker = new SwingWorker<String, Object>() {
+			        @Override
+			        protected String doInBackground() throws Exception {
+						if(singleKeyword){
+							boolean includePatchNoteData = true;
+							GraphCreator_SingleKeyword.createCharts(keyword,databaseURL,includePatchNoteData,
+									gameName,queryStartDate,queryEndDate,granularity,connectPoints);
+						}else{
+							String databaseTableName = "RedditPosts";
+							GraphCreator_MultiKeyword.createCharts(keywords, databaseURL, 
+									databaseTableName, gameName, queryStartDate , queryEndDate);
+						}
+						return "I don't know what this does? lol";                
+			        }
+			        @Override
+			        protected void done() {
+			            try {
+			            	// Hide the loading message and automagically switch to the "Display Graphs" tab
+			            	lblNewLabel_3.setVisible(false);
+			            	// Switch to the new tab automagically
+			            	tabbedPane.setSelectedIndex(2);
+			            	
+			            } catch (Exception e) {
+			                //ignore
+			            }
+			        }
+			    };      
+			    worker.execute();
+			    
+			    // Save the parameters from the last successful run
+			    // These will autofill into the fields on the next launch
+			    try {
+			    	//TODO
+			    	// create a new file with an ObjectOutputStream
+			    	FileOutputStream out = new FileOutputStream("userdata.tmp");
+			    	ObjectOutputStream oout = new ObjectOutputStream(out);
+		          
+			    	// write something in the file
+			    	oout.writeObject(databaseURL);
+			    	oout.writeObject(gameName);
+			    	oout.writeObject(queryStartDate);
+			    	oout.writeObject(queryEndDate);
+			    	oout.writeObject(granularity);
+			    	oout.writeObject(connectPoints);
+
+			    	// close the stream
+			    	oout.close();
+
+			    } catch (Exception ex) {ex.printStackTrace();}
+			    
+			    
 			}
 		});
 		btnCreateGraphs.setBounds(259, 305, 127, 23);
 		panel_1.add(btnCreateGraphs);
+		
+		
+		// Now that we have populated Panel 1, attempt to update fields with stored user values
+		try{
+	    	// create an ObjectInputStream for the file we created before
+	    	ObjectInputStream ois = new ObjectInputStream(new FileInputStream("userdata.tmp"));
+	
+	    	// read and print what we wrote before
+			textField_8.setText((String) ois.readObject()); //databaseURL
+			textField_5.setText((String) ois.readObject()); //gameName
+			textField_9.setText(""+(long)ois.readObject());	//queryStartDate
+			textField_10.setText(""+(long)ois.readObject());//queryEndDate
+			textField_11.setText(""+(Integer)ois.readObject());//granularity
+			chckbxYes_1.setSelected((boolean) ois.readObject());//connectPoints
+	    	ois.close();
+		} catch (Exception ex) {
+			// If this failed, do nothing (it probably failed because the userdata.tmp file doesn't exist)
+			System.out.println(ex.getMessage());
+		}
+		
 		
 		// -----------------------------------------------------
 		// PANEL 2
