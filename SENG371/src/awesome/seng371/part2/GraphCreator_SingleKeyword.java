@@ -64,7 +64,8 @@ public class GraphCreator_SingleKeyword {
 	 * - "analyticsNEW/<i>keyword</i>-singlekeyword_XYplot.png"<br>
 	 * - TODO ? more graphs
 	 * 
-	 * Precondition: the 'RedditPosts' table exists in the database
+	 * Precondition: the 'RedditPosts' and 'PatchNotes' tables exist in the database
+	 * (only the RedditPosts table need be populated)
 	 * 
 	 * @param keyword The keyword that will be queried
 	 * @param databaseURL Connection URL for the JDBC driver
@@ -79,6 +80,7 @@ public class GraphCreator_SingleKeyword {
 	public static void createCharts(String keyword, String databaseURL, boolean includePatchNoteData, 
 			String gameName, long queryStartDate , long queryEndDate, int granularity, boolean connectPoints ){
 	
+		/*
 		System.out.println("DEBUG");
 		System.out.println("keyword = "+ keyword);
 		System.out.println("databaseURL = "+ databaseURL);
@@ -87,7 +89,7 @@ public class GraphCreator_SingleKeyword {
 		System.out.println("queryStartDate = "+ queryStartDate);
 		System.out.println("queryEndDate = "+ queryEndDate);
 		System.out.println("granularity = "+ granularity);
-		System.out.println("connectPoints = "+ connectPoints);
+		System.out.println("connectPoints = "+ connectPoints);*/
 		
 		//-----------------------------------------------------------------
 		// Initialize the chart

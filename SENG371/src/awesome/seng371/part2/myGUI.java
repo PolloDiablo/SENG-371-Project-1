@@ -13,7 +13,6 @@ import java.awt.event.MouseEvent;
 
 import awesome.seng371.part2.DailyCheck;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -23,8 +22,6 @@ import java.io.ObjectOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class myGUI {
 	
@@ -40,9 +37,11 @@ public class myGUI {
 	private static JTabbedPane tabbedPane;
 	private static JPanel panel_1;
 	private static JPanel panel_2;
+	private static JPanel panel_3;
 	private static JLabel lblNewLabel_2;
 	private static JLabel lblNewLabel_11;
 	private static JLabel lblNewLabel_3;
+	private static JLabel lblNewLabel_4;
 	private static JCheckBox chckbxYes_1;
 	private static JTextField textField_5;
 	private static JTextField textField_6;
@@ -51,6 +50,11 @@ public class myGUI {
 	private static JTextField textField_9;
 	private static JTextField textField_10;
 	private static JTextField textField_11;
+	private static JTextField textField_12;
+	private static JTextField textField_13;
+	private static JTextField textField_14;
+	private static JTextField textField_15;
+	private static JTextField textField_16;
 	//private static JCheckBox chckbxYes;
 	
 	/**If true, use the single-keyword search, else use the multi-keyword search. */
@@ -277,14 +281,19 @@ public class myGUI {
 					try { if (conn != null) conn.close(); } catch (Exception e2) {};
 				}
 				
-				//TODO
 				// Also, ensure that the user didn't leave the keyword/keywords field blank
 				if( (singleKeyword && keyword.equals(""))|| (!singleKeyword && keywords.equals(""))){
 					lblNewLabel_3.setText("ERROR: keyword field blank");
 					lblNewLabel_3.setVisible(true);
 					return;
 				}
-				System.out.println("????" + textField_6.getText());
+				
+				// Avoid a filename length error
+				if( singleKeyword && keyword.length()>200){
+					lblNewLabel_3.setText("ERROR: keyword too long");
+					lblNewLabel_3.setVisible(true);
+					return;
+				}			
 				
 				// Show a loading message
 				lblNewLabel_3.setText("Loading...");
@@ -323,7 +332,6 @@ public class myGUI {
 			    // Save the parameters from the last successful run
 			    // These will autofill into the fields on the next launch
 			    try {
-			    	//TODO
 			    	// create a new file with an ObjectOutputStream
 			    	FileOutputStream out = new FileOutputStream("userdata.tmp");
 			    	ObjectOutputStream oout = new ObjectOutputStream(out);
@@ -347,26 +355,6 @@ public class myGUI {
 		btnCreateGraphs.setBounds(259, 305, 127, 23);
 		panel_1.add(btnCreateGraphs);
 		
-		
-		// Now that we have populated Panel 1, attempt to update fields with stored user values
-		try{
-	    	// create an ObjectInputStream for the file we created before
-	    	ObjectInputStream ois = new ObjectInputStream(new FileInputStream("userdata.tmp"));
-	
-	    	// read and print what we wrote before
-			textField_8.setText((String) ois.readObject()); //databaseURL
-			textField_5.setText((String) ois.readObject()); //gameName
-			textField_9.setText(""+(long)ois.readObject());	//queryStartDate
-			textField_10.setText(""+(long)ois.readObject());//queryEndDate
-			textField_11.setText(""+(Integer)ois.readObject());//granularity
-			chckbxYes_1.setSelected((boolean) ois.readObject());//connectPoints
-	    	ois.close();
-		} catch (Exception ex) {
-			// If this failed, do nothing (it probably failed because the userdata.tmp file doesn't exist)
-			System.out.println(ex.getMessage());
-		}
-		
-		
 		// -----------------------------------------------------
 		// PANEL 2
 		panel_2 = new JPanel();
@@ -389,6 +377,115 @@ public class myGUI {
 		});
 		btnTakeMeTo.setBounds(186, 68, 347, 169);
 		panel_2.add(btnTakeMeTo);
+		
+		// -----------------------------------------------------
+		// PANEL 3
+		panel_3 = new JPanel();
+		tabbedPane.addTab("Data Scraper", null, panel_3, null);
+		panel_3.setLayout(null);
+		
+		lblNewLabel_4 = new JLabel("<html><center>Use this scraper to populate your database, " +
+				"please read the database setup file at ~\\SENG-371-Project-1\\docs\\database-setup.txt</html>");
+		lblNewLabel_4.setBounds(10, 11, 579, 34);
+		panel_3.add(lblNewLabel_4);
+		
+		JLabel lblNewLabel_16 = new JLabel("Subreddit");
+		lblNewLabel_16.setBounds(10, 103, 343, 14);
+		panel_3.add(lblNewLabel_16);
+		JLabel lblNewLabel_12 = new JLabel("Database url");
+		lblNewLabel_12.setBounds(10, 153/*106*/, 343, 14);
+		panel_3.add(lblNewLabel_12);	
+		JLabel lblNewLabel_13 = new JLabel("Name of game in database table");
+		lblNewLabel_13.setBounds(10, 178, 274, 14);
+		panel_3.add(lblNewLabel_13);	
+		JLabel lblNewLabel_14 = new JLabel("Start date (epoch time)");
+		lblNewLabel_14.setBounds(10, 203, 274, 14);
+		panel_3.add(lblNewLabel_14);	
+		JLabel lblNewLabel_15 = new JLabel("End date (epoch time)");
+		lblNewLabel_15.setBounds(10, 228, 280, 14);
+		panel_3.add(lblNewLabel_15);
+		
+		
+		textField_16 = new JTextField();
+		textField_16.setBounds(369, 103, 230, 20);
+		panel_3.add(textField_16);
+		textField_16.setColumns(10);
+		
+		textField_12 = new JTextField();
+		textField_12.setBounds(369, 153, 230, 20);
+		panel_3.add(textField_12);
+		textField_12.setColumns(10);
+		
+		textField_13 = new JTextField();
+		textField_13.setBounds(369, 178, 230, 20);
+		panel_3.add(textField_13);
+		textField_13.setColumns(10);
+		
+		textField_14 = new JTextField();
+		textField_14.setBounds(369, 203, 230, 20);
+		panel_3.add(textField_14);
+		textField_14.setColumns(10);
+		
+		textField_15 = new JTextField();
+		textField_15.setBounds(369, 228, 230, 20);
+		panel_3.add(textField_15);
+		textField_15.setColumns(10);
+
+		JButton btnParseReddit = new JButton("Scrape Subreddit");
+		btnParseReddit.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+	
+				final String subredditName = textField_15.getText();
+				final String databaseURL = textField_12.getText();
+				final String gameName = textField_13.getText();
+				final long queryStartDate = Long.parseLong(textField_14.getText());
+				final long queryEndDate = Long.parseLong(textField_15.getText());
+				
+				// Before we try creating graphs, test the database URL
+				Connection conn = null;
+				try{
+					conn = DriverManager.getConnection(databaseURL);
+				} catch (Exception e1) {
+					lblNewLabel_3.setText("ERROR: Invalid Database url");
+					lblNewLabel_3.setVisible(true);
+					return;
+				} finally {
+					try { if (conn != null) conn.close(); } catch (Exception e2) {};
+				}
+				RedditParser.getRedditPostData(subredditName, databaseURL, gameName, queryStartDate, queryEndDate);
+			}
+		});
+		btnParseReddit.setBounds(259, 305, 150, 23);
+		panel_3.add(btnParseReddit);
+		
+		// -----------------------------------------------------
+		// Now that we have populated the panels, attempt to update fields with stored user values
+		try{
+	    	// create an ObjectInputStream for the file we created before
+	    	ObjectInputStream ois = new ObjectInputStream(new FileInputStream("userdata.tmp"));
+	
+	    	// read and print what we wrote before
+	    	//panel 1
+			textField_8.setText((String) ois.readObject()); //databaseURL
+			textField_5.setText((String) ois.readObject()); //gameName
+			textField_9.setText(""+(long)ois.readObject());	//queryStartDate
+			textField_10.setText(""+(long)ois.readObject());//queryEndDate
+			textField_11.setText(""+(Integer)ois.readObject());//granularity
+			chckbxYes_1.setSelected((boolean) ois.readObject());//connectPoints
+			//panel 3
+			textField_12.setText(textField_8.getText()); //databaseURL
+			textField_13.setText(textField_5.getText()); //gameName
+			textField_14.setText(textField_9.getText());	//queryStartDate
+			textField_15.setText(textField_10.getText());//queryEndDate
+	
+	    	ois.close();
+		} catch (Exception ex) {
+			// If this failed, do nothing (it probably failed because the userdata.tmp file doesn't exist)
+			System.out.println(ex.getMessage());
+		}
+		
+		
 		myGUI.setVisible(true);
 	}
 }
