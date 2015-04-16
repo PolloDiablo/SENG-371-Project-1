@@ -19,7 +19,7 @@ These led to the following design decisions for Project 2:
 - The tool should run on any subreddit. This means it is not limited to gaming-related subreddits, so developers on any kind of project could use it.
 
 <h2>Methodology</h2>
-This project was entirely programmed in Java. The code for Project 2 can be found in the Eclipse project in the Git repo. THe packge is "awesome/seng371/part2".
+This project was entirely programmed in Java. The code for Project 2 can be found in the Eclipse project in the Git repo. The packge is "awesome/seng371/part2".
 Note: the code for Project 1 can be found in the separate package: "jeremy/seng371/part1".
 
 <h3>Main Idea</h3>
@@ -31,14 +31,35 @@ Given the context above, we chose the following features for Project 2:
 
 In addition to creating the tool. We also decided to play around a little more with the existing data from Project 1, just to see what other visualizations we could create and what other information could be extracted from the dataset.
 
-TODO
-
 <h3>How to Run the Code</h3>
 
-TODO
-
 1. Setup a local SQLEXPRESS database as described in https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/docs/database-setup.txt
-2. 
+2. Download the project and open it in Eclipse
+3. Navigate to "src/myGUI.java" and press run
+
+The UI has 4 Panels, this is a brief overview of each:
+
+1. <b>Monitor Subreddit</b> - This feature lets you monitor a subreddit in realtime. It will look for posts which contatin the given keywords and that are above the given threshold. If it finds any posts from the last 24 hours that meet these criteria, it will send out an email. NOTE: this feature does not require the database to be setup, since it just looks at live Reddit data.
+2. <b>Graph Data</b> - Assuming you have setup AND populated the database (see #4), you can use this feature to create graphs. There are two primary graph types that you can create:
+  - Track the variations in popularity of a single keyword over time 
+  - Compare the occurences of multiple keywords over the entire time span
+3. <b>Display Graphs</b> - This page provides a link to the folder where the graphs have been generated.
+4. <b>Data Scraper</b> - Assuming you have created the database as described in /docs/data.txt , this feature allows you to populate the database with data from Reddit. Given that it has to send a large number of queries to the Reddit API, acquiring this data may take a long time.
+
+<h2>Results of Experiment</h2>
+A number of sample charts have been uploaded which demonstrate what can be done with through the UI:
+
+Here is the resulting graph for the single keyword "Ahri" during 2014:
+![Single-Keyword](https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/SENG371/analytics/ahri-singlekeyword_XYplot)
+
+Here is the resulting graph comparing all League of Legends characters created prior to 2014, during 2014:
+![Multi-Keyword](https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/SENG371/analytics/RedditPosts-multikeyword_barchart)
+
+
+As mentioned earlier, we also wanted to perform additional analysis on the existing data from Project 1. In the chart below, we normalize the values of Reddit Popularity and Patch Notes, and find the difference for each keyword. Essentially, these tells you which League of Legends characters are getting proportionally more or less attention when compared to the forum activity.
+Since this chart requires Patch Note data, we did not make it accessible through the UI. However, the code to create this type of chart resides in "src/GraphCreator_MultiKeyword.java"
+![Normalized Comparison](https://github.com/PolloDiablo/SENG-371-Project-1/blob/master/SENG371/analytics/RedditPosts-multikeyword_barchart)
+
 
 <h2>Analysis and Conclusion</h2>
 TODO
