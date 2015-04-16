@@ -66,7 +66,7 @@ Since this chart requires Patch Note data, we did not make it accessible through
 
 
 <h2>Analysis and Conclusion</h2>
-Overall, the tool seemed to be a success. The project was not over-scoped, so we had time to implement all intended functionality. A video demo of the tool is available, coming soon...
+Overall, the tool seemed to be a success. The project was not over-scoped, so we had time to implement all intended functionality. A video demo of the tool is available [here](https://www.youtube.com/watch?v=OGSlmd3pc8U).
 
 <h3>Threats to Validity</h3>
 This project focused largely on creating the tool, rather than analyzing data. The validity of any graphs created by this tool will vary largely based on what data the user is studying and how they setup each graph. However, in all cases, users will be looking at Reddit data, so they must be aware of the limitations of natural language parsing. A keyword search will not pick-up on things such as slang, typos, abbreviations, or sarcasm. Additionally, any online forum is subject to trolling and any number of forum "games" which could affect the data being collected.
